@@ -17,8 +17,9 @@ class Solution:
             sum = (x + y + carry)
             carry = sum // 10
 
-            result.next = ListNode(sum % 10)
-            result = result.next
+            node = ListNode(sum % 10)
+            result.next = node
+            result = node
             p = p.next if p else None
             q = q.next if q else None
         
