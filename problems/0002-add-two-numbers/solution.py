@@ -14,12 +14,11 @@ class Solution:
             x = p.val if p else 0
             y = q.val if q else 0
             
-            sum = (x + y + carry) % 10
-            carry = (x + y + carry) // 10
+            sum = (x + y + carry)
+            carry = sum // 10
 
-            node = ListNode(sum)
-            result.next = node
-            result = node
+            result.next = ListNode(sum % 10)
+            result = result.next
             p = p.next if p else None
             q = q.next if q else None
         
