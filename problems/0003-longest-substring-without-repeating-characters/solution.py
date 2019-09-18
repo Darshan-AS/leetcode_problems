@@ -4,10 +4,10 @@ class Solution:
         hash_map = {}
         
         i = 0
-        for j in range(len(s)):
-            if s[j] in hash_map.keys():
-                i = max(hash_map[s[j]] + 1, i)
-            hash_map[s[j]] = j
+        for j, ch in enumerate(s):
+            if ch in hash_map.keys():
+                i = max(hash_map[ch] + 1, i)
+            hash_map[ch] = j
             max_count = max(max_count, j - i + 1)
         
         return max_count
