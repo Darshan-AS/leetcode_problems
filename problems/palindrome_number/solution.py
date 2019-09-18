@@ -2,11 +2,7 @@ import math
 
 class Solution:
     def isPalindrome(self, x: int) -> bool:
-        if x < 0:
-            return False
-        elif x < 10:
-            return True
-        elif x % 10 == 0:
+        if x < 0 or (x % 10 == 0 and x >= 10):
             return False
         
         rev = 0
