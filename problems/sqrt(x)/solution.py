@@ -3,5 +3,4 @@ class Solution:
         a = x
         while a * a > x:
             a = int((a + x / a) / 2)
-        
         return a
