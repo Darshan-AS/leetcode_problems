@@ -23,9 +23,9 @@ class Solution:
         # return self.is_mirror(root.right, root.left) # recursive
         
         # Iterative
-        queue = [(root.right, root.left)]
-        while queue:
-            a, b = queue.pop()
+        stack = [(root.right, root.left)]
+        while stack:
+            a, b = stack.pop()
             if not a and not b:
                 continue
             elif not a or not b:
@@ -34,8 +34,8 @@ class Solution:
             if a.val != b.val:
                 return False
             
-            queue.append((a.right, b.left))
-            queue.append((a.left, b.right))
+            stack.append((a.right, b.left))
+            stack.append((a.left, b.right))
         
         return True
     
