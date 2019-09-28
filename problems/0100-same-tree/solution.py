@@ -4,19 +4,21 @@
 #         self.val = x
 #         self.left = None
 #         self.right = None
-from collections import deque
+
 class Solution:
     def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+#         # Recursive
 #         if not p and not q:
 #             return True
 #         elif not p or not q:
 #             return False
-        
+#         
 #         return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
         
-        queue = deque([(p, q)])
-        while queue:
-            p, q = queue.popleft()
+        # Iterative
+        stack = [(p, q)]
+        while stack:
+            p, q = stack.pop()
             
             if not p and not q:
                 continue
@@ -26,7 +28,7 @@ class Solution:
             if p.val != q.val:
                 return False
             
-            queue.append((p.left, q.left))
-            queue.append((p.right, q.right))
+            stack.append((p.left, q.left))
+            stack.append((p.right, q.right))
         
         return True
