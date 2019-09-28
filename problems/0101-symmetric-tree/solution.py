@@ -5,7 +5,6 @@
 #         self.left = None
 #         self.right = None
 
-from collections import deque
 class Solution:
     def is_mirror(self, a, b):
             if not a and not b:
@@ -23,9 +22,10 @@ class Solution:
         
         # return self.is_mirror(root.right, root.left) # recursive
         
-        queue = deque([(root.right, root.left)])
+        # Iterative
+        queue = [(root.right, root.left)]
         while queue:
-            a, b = queue.popleft()
+            a, b = queue.pop()
             if not a and not b:
                 continue
             elif not a or not b:
