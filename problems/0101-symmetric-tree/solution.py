@@ -5,12 +5,9 @@
 #         self.left = None
 #         self.right = None
 
+from collections import deque
 class Solution:
-    def isSymmetric(self, root: TreeNode) -> bool:
-        if not root:
-            return True
-        
-        def is_mirror(a, b):
+    def is_mirror(self, a, b):
             if not a and not b:
                 return True
             if not a or not b:
@@ -18,6 +15,11 @@ class Solution:
             if a.val != b.val:
                 return False
             
-            return is_mirror(a.right, b.left) and is_mirror(a.left, b.right)
+            return self.is_mirror(a.right, b.left) and self.is_mirror(a.left, b.right)
         
-        return is_mirror(root.right, root.left)
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        
+        return self.is_mirror(root.right, root.left)
+    
