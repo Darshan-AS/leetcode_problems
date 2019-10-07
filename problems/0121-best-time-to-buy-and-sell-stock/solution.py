@@ -7,12 +7,10 @@ class Solution:
         min_val = max_val = prices[0]
         profit = 0
         for i in prices:
-            if i > max_val:
-                max_val = i
-                
             if i < min_val:
-                min_val = max_val = i
-            
+                min_val = i
+             
+            max_val = i      
             profit = max(profit, max_val - min_val)
             
         return profit
