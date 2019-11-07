@@ -1,5 +1,5 @@
 # Write your MySQL query statement below
-SELECT Person.FirstName, Person.LastName, Address.City, Address.State
+SELECT FirstName, LastName, City, State
 FROM Person
 LEFT OUTER JOIN Address
-ON Person.PersonId = Address.PersonId
+ON Person.PersonId = Address.PersonId;
