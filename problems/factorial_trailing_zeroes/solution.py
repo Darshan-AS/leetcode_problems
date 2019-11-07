@@ -4,8 +4,9 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        if not n:
-            return 0
+        zeroes_count = 0
+        while n:
+            zeroes_count += n // 5
+            n = n // 5
         
-        a = n // 5
-        return a + self.trailingZeroes(a)
+        return zeroes_count
