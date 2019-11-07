@@ -5,8 +5,9 @@ class Solution(object):
         :rtype: int
         """
         zeroes_count = 0
-        while n:
-            zeroes_count += n // 5
-            n = n // 5
+        i = n
+        while i:
+            i = i // 5
+            zeroes_count += i
         
         return zeroes_count
