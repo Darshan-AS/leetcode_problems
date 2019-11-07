@@ -7,9 +7,7 @@ class Solution(object):
         """
         alpha_num_map = dict(zip(string.ascii_uppercase, range(1, 27)))
         column_num = 0
-        multiple = 1
-        for i in reversed(s):
-            column_num += alpha_num_map[i] * multiple
-            multiple *= 26
+        for i in s:
+            column_num = column_num * 26 + alpha_num_map[i]
         
         return column_num
