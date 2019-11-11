@@ -6,8 +6,7 @@ class Solution(object):
         """
         count, i = 0, n
         while i > 0:
-            if i % 2:
-                count += 1
-            i = i // 2
+            count += 1
+            i = i & (i - 1)
         
         return count
