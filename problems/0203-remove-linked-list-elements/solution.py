@@ -11,18 +11,12 @@ class Solution(object):
         :type val: int
         :rtype: ListNode
         """
-        if not head:
-            return
-        
-        start = head
-        while start and start.val == val:
-            start = start.next
-        
-        i = start
+        start = i = ListNode(0)
+        i.next = head
         while i and i.next:
             if i.next.val == val:
                 i.next = i.next.next
             else:
                 i = i.next
             
-        return start
+        return start.next
