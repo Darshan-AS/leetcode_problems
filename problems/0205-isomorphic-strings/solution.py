@@ -4,11 +4,13 @@ class Solution(object):
         :type s: str
         :type t: str
         :rtype: bool
-        """
-        s_map, t_map = {}, {}
-        
-        for i, j in zip(s, t):
-            if (i in s_map.keys() and s_map[i] != j) or (j in t_map.keys() and t_map[j] != i):
-                return False
-            s_map[i], t_map[j] = j, i
+        """        
+        for _ in range(2):
+            hash_map = {}
+            
+            for i, j in zip(s, t):
+                if i in hash_map.keys() and hash_map[i] != j:
+                    return False
+                hash_map[i] = j
+            s, t = t, s
         return True
