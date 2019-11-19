@@ -14,5 +14,15 @@ class Solution(object):
         if not root:
             return
         
-        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
+        nodes_to_swap = collections.deque([root])
+        
+        while nodes_to_swap:
+            node = nodes_to_swap.popleft()
+            node.left, node.right = node.right, node.left
+            
+            if node.left:
+                nodes_to_swap.append(node.left)
+            if node.right:
+                nodes_to_swap.append(node.right)
+        
         return root
