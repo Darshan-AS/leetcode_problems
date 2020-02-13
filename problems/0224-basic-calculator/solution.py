@@ -8,34 +8,28 @@ class Solution:
         i = 0
         stack = []
         while i < len(s):
-            if s[i] == ')' and len(stack) > 2:
+            if s[i] in ('+', '-', '('):
+                stack.append(s[i])
+                i += 1
+            elif s[i] == ')' and len(stack) > 2:
                 b = stack.pop()
                 stack.pop()
                 op = stack.pop()
                 a = stack.pop()
                 stack.append(evaluate(a, op, b))
                 i += 1
-                continue
-                    
-            if s[i] in ('+', '-', '('):
-                stack.append(s[i])
-                i += 1
-                continue
-            
-            if not s[i].isdigit():
-                i += 1
-                continue
-                
-            a = 0
-            while i < len(s) and s[i].isdigit():
-                a = a * 10 + int(s[i])
-                i += 1
-            
-            if stack and stack[-1] in ('+', '-'):
-                op = stack.pop()
-                stack.append(evaluate(stack.pop(), op, a))
+            elif s[i].isdigit():
+                a = 0
+                while i < len(s) and s[i].isdigit():
+                    a = a * 10 + int(s[i])
+                    i += 1
+
+                if stack and stack[-1] in ('+', '-'):
+                    op = stack.pop()
+                    stack.append(evaluate(stack.pop(), op, a))
+                else:
+                    stack.append(a)
             else:
-                stack.append(a)
-            
+                i += 1
         
         return stack.pop()
