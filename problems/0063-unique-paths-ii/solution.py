@@ -3,8 +3,12 @@ class Solution:
         for i in range(len(g)):
             for j in range(len(g[0])):
                 if g[i][j]:
-                    g[i][j] = 0
-                    continue
+                    if i == 0 and j == 0:
+                        return 0 
+                    else:
+                        g[i][j] = 0
+                        continue
+                        
                 elif i == 0 and j == 0:
                     g[i][j] = 1
                     continue
