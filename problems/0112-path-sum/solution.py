@@ -10,16 +10,15 @@ class Solution:
         if not root:
             return False
         
-        stack = [(root, root.val)]
+        stack = [(root, 0)]
         while stack:
-            node, current_sum = stack.pop()
-            if current_sum == sum and not node.left and not node.right:
+            node, s = stack.pop()
+            s += node.val
+            
+            if not node.left and not node.right and s == sum:
                 return True
             
-            if node.left:
-                stack.append((node.left, current_sum + node.left.val))
-                
-            if node.right:
-                stack.append((node.right, current_sum + node.right.val))
-            
+            if node.left: stack.append((node.left, s))
+            if node.right: stack.append((node.right, s))
+        
         return False
