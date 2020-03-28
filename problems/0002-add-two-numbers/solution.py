@@ -6,24 +6,25 @@
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        l3 = result = ListNode(0)
+        sum_node = p3 = ListNode(0)
+        p1, p2 = l1, l2
         
-        sum, carry = 0, 0
-        p, q = l1, l2
-        while p or q:
-            x = p.val if p else 0
-            y = q.val if q else 0
+        carry = 0
+        while p1 or p2:
+            s = carry
+            if p1:
+                s += p1.val
+                p1 = p1.next
             
-            sum = (x + y + carry)
-            carry = sum // 10
-
-            node = ListNode(sum % 10)
-            result.next = node
-            result = node
-            p = p.next if p else None
-            q = q.next if q else None
+            if p2:
+                s += p2.val
+                p2 = p2.next
+                
+            p3.next = ListNode(s % 10)
+            carry = s // 10
+            p3 = p3.next
         
         if carry:
-            result.next = ListNode(1)
-            
-        return l3.next
+            p3.next = ListNode(carry)
+        
+        return sum_node.next
