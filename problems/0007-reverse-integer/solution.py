@@ -1,13 +1,12 @@
 class Solution:
-    def reverse(self, x: int) -> int:
-        if not x:
-            return x
-        temp = 2 ** 31
-        min_int, max_int = - temp, temp - 1
-        
-        sign = x // abs(x)
-        rev = int(str(abs(x))[::-1]) * sign
-        
-        if rev > max_int or rev < min_int:
+    def reverse(self, original_x: int) -> int:
+        x = abs(original_x)
+        new_x = 0
+        while x:
+            new_x = new_x * 10 + x % 10
+            x = x // 10
+            
+        if new_x > 2 ** 31:
             return 0
-        return rev
+        
+        return new_x if original_x >= 0 else - new_x
