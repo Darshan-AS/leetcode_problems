@@ -1,23 +1,14 @@
-class Solution(object):
-    def find_next(self, i):
-        next_i = 0
-        while i > 0:
-            next_i += (i % 10)**2
-            i = i // 10
-        return next_i
-    
-    def isHappy(self, n):
-        """
-        :type n: int
-        :rtype: bool
-        """
-        i = n
+class Solution:
+    def isHappy(self, n: int) -> bool:
         seen = set()
-        while i not in seen:
-            if i == 1:
-                return True
-            seen.add(i)
-            i = self.find_next(i)
-        return False
-            
-            
+        while n != 1 and n not in seen:
+            seen.add(n)
+            n = self.find_next(n)
+        return n == 1
+    
+    def find_next(self, n):
+        next_n = 0
+        while n:
+            n, r = divmod(n, 10)
+            next_n += r * r
+        return next_n
