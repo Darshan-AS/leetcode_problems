@@ -12,10 +12,10 @@ class Solution:
             if not node:
                 return 0
             
-            l_max_sum = depth_first_sum(node.left)
-            r_max_sum = depth_first_sum(node.right)
-            self.max_sum = max(self.max_sum, node.val, l_max_sum + node.val, r_max_sum + node.val, l_max_sum + r_max_sum + node.val)
-            return max(l_max_sum + node.val, r_max_sum + node.val, node.val)
+            l_max_sum = max(depth_first_sum(node.left), 0)
+            r_max_sum = max(depth_first_sum(node.right), 0)
+            self.max_sum = max(self.max_sum, l_max_sum + r_max_sum + node.val)
+            return max(l_max_sum, r_max_sum, 0) + node.val
         
         depth_first_sum(root)
         return self.max_sum
