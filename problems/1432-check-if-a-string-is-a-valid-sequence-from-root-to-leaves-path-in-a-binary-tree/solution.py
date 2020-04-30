@@ -10,10 +10,12 @@ class Solution:
         n = len(arr)
         
         def dfs(node, index):
-            l_value = dfs(node.left, index + 1) if node.left else False
-            r_value = dfs(node.right, index + 1) if node.right else False
-            child_val = True if not node.left and not node.right and index == n - 1 else (l_value or r_value)
+            if not node or index == n:
+                return False
+
+            if not node.left and not node.right and index == n - 1 and node.val == arr[index]:
+                return True
             
-            return index < n and node.val == arr[index] and child_val
+            return node.val == arr[index] and (dfs(node.left, index+1) or dfs(node.right, index+1))
         
         return dfs(root, 0)
