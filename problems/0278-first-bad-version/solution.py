@@ -11,21 +11,12 @@ class Solution:
         """
         i, j = 1, n
         
-        if isBadVersion(i):
-            return i
-        else:
-            i += 1
-        
-        while i <= j:
+        while i < j:
             m = (i + j) // 2
             
-            if not isBadVersion(m):
-                i = m + 1
-                continue
-            
-            if not isBadVersion(m - 1):
-                return m
+            if isBadVersion(m):
+                j = m
             else:
-                j = m - 1
+                i = m + 1
         
-        return n
+        return j
