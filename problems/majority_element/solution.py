@@ -1,15 +1,12 @@
-class Solution(object):
-    def majorityElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        count = 0
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
         candidate = None
+        count = 0
+        
         for i in nums:
-            if not count:
+            if count == 0:
                 candidate = i
             
-            count += 1 if candidate == i else -1
+            count += 1 if i == candidate else -1
         
         return candidate
