@@ -8,15 +8,15 @@ class Solution:
         if not head or not head.next:
             return head
         
-        odd_head, even_head = head, head.next
-        odd_ptr, even_ptr = odd_head, even_head
+        odd_ptr, even_ptr = head, head.next
+        even_head = even_ptr
         
-        while odd_ptr and even_ptr and odd_ptr.next and even_ptr.next:
+        while even_ptr and even_ptr.next:
             odd_ptr.next, even_ptr.next = odd_ptr.next.next, even_ptr.next.next
             odd_ptr, even_ptr = odd_ptr.next, even_ptr.next
             
         odd_ptr.next = even_head
-        return odd_head
+        return head
             
             
             
