@@ -10,8 +10,9 @@ class Solution:
             while j >= 0 and not s[j].isalnum():
                 j -= 1
 
-            if i >= n or j < 0:
+            if i >= j:
                 return True
+            
             if s[i].lower() != s[j].lower():
                 return False
             
