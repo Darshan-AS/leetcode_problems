@@ -6,13 +6,11 @@ class Solution:
                 return
             
             last_digit = num % 10
-            a, b = last_digit + K, last_digit - K
+            next_digits = set((last_digit + K, last_digit - K))
             
-            for j in set((a, b)):
+            for j in next_digits:
                 if 0 <= j <= 9:
                     yield from helper(num * 10 + j, n - 1)
         
-        ans = []
-        for i in range(0 if N == 1 else 1, 10):
-            ans.extend(list(helper(i, N - 1)))
-        return ans
+        begin = 0 if N == 1 else 1
+        return list(chain(*(helper(i, N - 1) for i in range(begin, 10))))
