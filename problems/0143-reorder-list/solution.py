@@ -8,24 +8,36 @@ class Solution:
         """
         Do not return anything, modify head in-place instead.
         """
-        node_pointers = []
-        curr = head
-        while curr:
-            node_pointers.append(curr)
-            curr = curr.next
+        if not head:
+            return
         
-        i, j = 0, len(node_pointers) - 1
-        prev_node = ListNode()
-        while i < j:
-            left_node, right_node = node_pointers[i], node_pointers[j]
-            prev_node.next = left_node
-            left_node.next = right_node
-            prev_node = right_node
-            i += 1
-            j -= 1
+        walker = runner = head
+        while runner and runner.next:
+            walker = walker.next
+            runner = runner.next.next
         
-        if i == j:
-            prev_node.next = node_pointers[i]
-            prev_node = prev_node.next
-        prev_node.next = None
+        prev, walker = walker, walker.next
+        prev.next = None
+        while walker:
+            temp = walker.next
+            walker.next = prev
+            prev = walker
+            walker = temp
+        
+        front, rear = head, prev
+        curr_end = ListNode()
+        while front and rear and front != rear:
+            next_front = front.next
+            next_rear = rear.next
+            
+            curr_end.next = front
+            front.next = rear
+            rear.next = None
+            curr_end = rear
+            
+            front = next_front
+            rear = next_rear
+        
+        if front == rear:
+            curr_end.next = front
         
