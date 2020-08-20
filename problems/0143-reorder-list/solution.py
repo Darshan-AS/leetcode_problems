@@ -16,13 +16,12 @@ class Solution:
             walker = walker.next
             runner = runner.next.next
         
-        prev, walker = walker, walker.next
-        prev.next = None
-        while walker:
-            temp = walker.next
-            walker.next = prev
-            prev = walker
-            walker = temp
+        prev, curr = None, walker
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
         
         front, rear = head, prev
         curr_end = ListNode()
