@@ -1,14 +1,12 @@
 class Solution:
     def sortArrayByParity(self, A: List[int]) -> List[int]:
-        sortedA = [0] * len(A)
-        front, rear = 0, len(A) - 1
+        i, j = 0, len(A) - 1
         
-        for i in A:
-            if i % 2:
-                sortedA[rear] = i
-                rear -= 1
-            else:
-                sortedA[front] = i
-                front += 1
+        while i <= j:
+            if A[i] % 2 and not A[j] % 2:
+                A[i], A[j] = A[j], A[i]
+            
+            if not A[i] % 2: i += 1
+            if A[j] % 2: j -= 1
         
-        return sortedA
+        return A
