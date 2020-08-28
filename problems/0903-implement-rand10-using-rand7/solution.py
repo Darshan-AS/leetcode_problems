@@ -7,9 +7,5 @@ class Solution:
         """
         :rtype: int
         """
-        a, b = rand7(), rand7()
-        x = (a - 1) * 7 + (b - 1)
-        while x >= 40:
-            a, b = rand7(), rand7()
-            x = (a - 1) * 7 + (b - 1)
-        return x % 10 + 1
+        n = (rand7() - 1) * 7 + (rand7() - 1)
+        return self.rand10() if n >= 40 else n % 10 + 1
