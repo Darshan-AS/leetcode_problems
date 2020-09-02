@@ -1,15 +1,14 @@
-class Solution(object):
-    def containsNearbyDuplicate(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: bool
-        """
-        seen = {}
-        for index, value in enumerate(nums):
-            if value in seen and index - seen[value] <= k:
-                return True
-            
-            seen[value] = index
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        if not k: return False
         
+        window = set(nums[:k])
+        if len(window) < min(len(nums), k):
+            return True
+            
+        for i in range(k, len(nums)):
+            if nums[i] in window:
+                return True
+            window.remove(nums[i - k])
+            window.add(nums[i])
         return False
