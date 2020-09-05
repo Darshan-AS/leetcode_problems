@@ -6,4 +6,4 @@ class Solution:
             x = x // 10
             
         if new_x > 2 ** 31: return 0
-        return new_x if original_x >= 0 else - new_x
+        return new_x if original_x >= 0 else -new_x
