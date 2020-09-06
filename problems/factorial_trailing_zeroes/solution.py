@@ -1,13 +1,5 @@
-class Solution(object):
-    def trailingZeroes(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        zeroes_count = 0
-        i = n
-        while i:
-            i = i // 5
-            zeroes_count += i
-        
+class Solution:
+    def trailingZeroes(self, n: int) -> int:
+        zeroes_count, i = 0, n
+        while i := i // 5: zeroes_count += i
         return zeroes_count
