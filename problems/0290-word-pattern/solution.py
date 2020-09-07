@@ -6,8 +6,7 @@ class Solution:
         
         match, words = dict(), set()
         for ch, word in zip(p, s):
-            if ch in match and match[ch] != word:
-                return False
+            if ch in match and match[ch] != word: return False
             if ch not in match and word in words: return False
             match[ch] = word
             words.add(word)
