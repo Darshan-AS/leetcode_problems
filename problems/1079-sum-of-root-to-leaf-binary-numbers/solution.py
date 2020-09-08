@@ -10,7 +10,7 @@ class Solution:
             stack = [(root_node, 0)]
             while stack:
                 node, n = stack.pop()
-                n = n * 2 + node.val
+                n = n << 1 | node.val
                 
                 if not node.left and not node.right: yield n
                 if node.left: stack.append((node.left, n))
