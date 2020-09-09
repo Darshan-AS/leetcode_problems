@@ -8,6 +8,4 @@ class Solution:
             return ans
         
         v1, v2 = weight(version1), weight(version2)
-        if v1 > v2: return 1
-        elif v1 < v2: return -1
-        else: return 0
+        return (v1 > v2) - (v1 < v2)
