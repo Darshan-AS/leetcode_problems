@@ -1,16 +1,10 @@
 class Solution:
-            
     def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
-        
-        min_val = max_val = prices[0]
         profit = 0
-        for i in prices:
-            if i < min_val:
-                min_val = i
-             
-            max_val = i      
-            profit = max(profit, max_val - min_val)
-            
+        if not prices: return profit
+        
+        min_price = prices[0]
+        for curr_price in prices:
+            profit = max(profit, curr_price - min_price)
+            min_price = min(min_price, curr_price)
         return profit
