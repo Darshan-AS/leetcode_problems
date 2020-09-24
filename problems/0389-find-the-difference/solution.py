@@ -1,5 +1,5 @@
-from collections import Counter
+from functools import reduce
 
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
-        return list((Counter(t) - Counter(s)).keys())[0]
+        return reduce(lambda x, y: chr(ord(x) ^ ord(y)), s + t)
