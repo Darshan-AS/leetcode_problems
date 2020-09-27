@@ -27,10 +27,10 @@ class Solution:
         while queue:
             node, ans = queue.popleft()
             visited.add(node.var)
-            if node.var == denominator:
-                return ans
             
             for connection, value in node.connections.items():
+                if connection.var == denominator:
+                    return ans * value
                 if connection.var not in visited:
                     queue.append((connection, ans * value))
         return -1.0
