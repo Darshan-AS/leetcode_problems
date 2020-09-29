@@ -3,12 +3,11 @@ class Solution:
         words = set(wordDict)
         n = len(s)
         
-        @lru_cache(None)
-        def dfs(k):
-            if k == n: return True
-            
-            for i in range(k + 1, n + 1):
-                if (s[k:i] in words) and dfs(i): return True
-            return False
-        
-        return dfs(0)
+        dp = [False] * (n + 1)
+        dp[0] = True
+        for j in range(n + 1):
+            for i in range(j):
+                if dp[i] and s[i:j] in words:
+                    dp[j] = True
+                    break
+        return dp[-1]
