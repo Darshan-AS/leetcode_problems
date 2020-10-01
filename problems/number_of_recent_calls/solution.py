@@ -1,16 +1,16 @@
 from collections import deque
+from bisect import bisect
 
 class RecentCounter:
     TIME_FRAME = 3000
     
     def __init__(self):
-        self.history = deque()
+        self.history = []
+        self.start = 0
 
     def ping(self, t: int) -> int:
         self.history.append(t)
-        while self.history[0] < t - RecentCounter.TIME_FRAME:
-            self.history.popleft()
-        return len(self.history)
+        return len(self.history) - bisect_left(self.history, t - self.TIME_FRAME, self.start)
 
 
 # Your RecentCounter object will be instantiated and called as such:
