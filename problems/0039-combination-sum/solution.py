@@ -1,21 +1,18 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         sol = []
-        prefix = []
-        n = len(candidates)
         
-        def dfs(index, k):
-            if candidates[index] > k:
-                return
-            elif (x := candidates[index]) == k:
-                sol.append(prefix + [x])
-                return
+        def find_sum(index, selected, rem_target):
+            if rem_target == 0:
+                sol.append(selected.copy())
+                return 
             
-            prefix.append(candidates[index])
-            for i in range(index, n):
-                dfs(i, k - candidates[index])
-            prefix.pop()
-        
-        for i in range(n):
-            dfs(i, target)
+            if rem_target < 0: return
+            
+            for i in range(index, len(candidates)):
+                selected.append(candidates[i])
+                find_sum(i, selected, rem_target - candidates[i])
+                selected.pop()
+            
+        find_sum(0, [], target)
         return sol
