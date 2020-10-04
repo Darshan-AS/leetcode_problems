@@ -2,11 +2,10 @@ from itertools import product
 
 class Solution:
     def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
+        sorted_intervals = sorted(intervals, key=lambda x: (x[0], -x[1]))
         count = len(intervals)
-        for a, b in intervals:
-            for c, d in intervals:
-                if c <= a and b <= d and not (a == c and b == d):
-                    count -= 1
-                    break
-        
+        right = -1
+        for _, b in sorted_intervals:
+            if b <= right: count -=1
+            else: right = b
         return count
