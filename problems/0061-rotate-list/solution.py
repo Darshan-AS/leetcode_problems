@@ -6,15 +6,14 @@
 class Solution:
     def rotateRight(self, head: ListNode, k: int) -> ListNode:
         if not k or not head: return head
+        
         i = k
         a = b = head
         while i:
             if not b.next:
                 b = head
-                i = k % (k - i + 1)
-                if not i:
-                    return head
-                continue
+                if not (i := k % (k - i + 1)): return head
+                else: continue
             b = b.next
             i -= 1
         
