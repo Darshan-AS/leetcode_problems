@@ -1,17 +1,10 @@
 class Solution:
     def findMinArrowShots(self, points: List[List[int]]) -> int:
-        if not points: return 0
-        
-        start = float('-inf')
-        end = float('inf')
-        shots = 1
-        
-        points.sort()
-        for a, b in points:
-            if a > end:
+        end = float('-inf')
+        shots = 0     
+        points.sort(key=lambda x: x[1])
+        for point in points:
+            if point[0] > end:
                 shots += 1
-                start, end = a, b
-            else:
-                start = max(start, a)
-                end = min(end, b)
+                end = point[1]
         return shots
