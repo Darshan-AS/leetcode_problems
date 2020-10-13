@@ -4,6 +4,7 @@
 #         self.val = val
 #         self.next = next
 class Solution:
+    # Top down approach    
     def sortList(self, head: ListNode) -> ListNode:
         if not head or not head.next:
             return head
