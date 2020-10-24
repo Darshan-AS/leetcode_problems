@@ -7,8 +7,8 @@ class Solution:
             while i <= j and power >= tokens[i]:
                 power -= tokens[i]
                 score += 1
-                max_score = max(max_score, score)
                 i += 1
+            max_score = max(max_score, score)
             
             if not score:
                 return max_score
