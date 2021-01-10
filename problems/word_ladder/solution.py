@@ -1,12 +1,12 @@
 from collections import deque, defaultdict
+from itertools import product
 
 class Solution:
 
     def ladderLength(self, begin_word: str, end_word: str, word_list: List[str]) -> int:
         neighbours = defaultdict(set)
-        for word in word_list:
-            for i in range(len(word)):
-                neighbours[word[:i] + "*" + word[i + 1:]].add(word)
+        for word, i in product(word_list, range(len(begin_word))):
+            neighbours[word[:i] + "*" + word[i + 1:]].add(word)
         
         queue = deque([(begin_word, 1)])
         seen = set()
