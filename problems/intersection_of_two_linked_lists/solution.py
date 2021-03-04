@@ -6,25 +6,12 @@
 
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB: return
         pa, pb = headA, headB
-        a_crossed_end = b_crossed_end = False
+        pa_rotation = pb_rotation = 0
         
-        while True:
-            if pa and pb and pa == pb: return pa
-            
-            if pa.next:
-                pa = pa.next 
-            else:
-                if a_crossed_end: return
-                pa = headB
-                a_crossed_end = True
-            
-            if pb.next:
-                pb = pb.next 
-            else:
-                if b_crossed_end: return
-                pb = headA
-                b_crossed_end = True
+        while pa_rotation <= 1 and pb_rotation <= 1:
+            if pa and pb and pa == pb: return pa   
+            pa, pa_rotation = (pa.next, pa_rotation) if pa and pa.next else (headB, pa_rotation + 1)
+            pb, pb_rotation = (pb.next, pb_rotation) if pb and pb.next else (headA, pb_rotation + 1)
                 
             
