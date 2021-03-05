@@ -13,13 +13,7 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        def bfs(root_):
-            level = (root_,)
-            while level:
-                yield from ((node.val if node else None) for node in level)
-                level = tuple(child for node in level for child in ([node.left, node.right] if node else []))
-        
-        return ','.join(map(str, bfs(root)))
+        return f'{str(root.val)},{self.serialize(root.left)},{self.serialize(root.right)}' if root else str(None)
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -27,21 +21,15 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
+        def deserialize_helper(datas):
+            node = None if (x := datas.popleft()) is None else TreeNode(x)
+            if not node: return node
+            node.left = deserialize_helper(datas)
+            node.right = deserialize_helper(datas)
+            return node
+        
         node_datas = deque(map(lambda s: int(s) if s != 'None' else None, data.split(',')))
-        getNextTreeNode = lambda datas: None if (x := node_datas.popleft()) is None else TreeNode(x)
-        
-        root = getNextTreeNode(node_datas)
-        if not root: return
-        
-        queue = deque((root,))
-        while queue:
-            node = queue.popleft()
-            node.left = getNextTreeNode(node_datas)
-            node.right = getNextTreeNode(node_datas)
-            if node.left: queue.append(node.left)
-            if node.right: queue.append(node.right)
-        
-        return root
+        return deserialize_helper(node_datas)
 
 # Your Codec object will be instantiated and called as such:
 # ser = Codec()
