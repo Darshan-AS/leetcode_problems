@@ -1,19 +1,11 @@
 class Solution:
-    def maximalSquare(self, m: List[List[str]]) -> int:
-        if not m:
-            return 0
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        m, n = len(matrix), len(matrix[0])
         
-        dp = [0] * (len(m[0]) + 1)
-        max_squares = 0
+        max_square_length = prev_dp_j = 0
+        dp = [0] * (n + 1)
+        for i, j in product(range(m), range(n)):
+            dp[j], prev_dp_j = (min(dp[j], dp[j - 1], prev_dp_j) + 1 if matrix[i][j] == "1" else 0, dp[j])
+            max_square_length = max(max_square_length, dp[j])
 
-        for i in range(len(m)):
-            cache = 0
-            for j in range(len(m[0])):
-                if m[i][j] == "1":
-                    cache, dp[j + 1] = dp[j + 1], min(dp[j], dp[j + 1], cache) + 1
-                    max_squares = max(max_squares, dp[j + 1])
-                else:
-                    dp[j + 1] = 0            
-                    
-        return max_squares ** 2
-                    
+        return max_square_length ** 2
