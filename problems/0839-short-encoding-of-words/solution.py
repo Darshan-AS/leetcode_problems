@@ -19,10 +19,10 @@ class Solution:
         for word in words: insert_to_trie(trie, word)
         return trie
     
-    def count_nodes_in_tree(self, root: TrieNode, depth=0) -> int:
+    def sum_depths(self, root: TrieNode, depth=0) -> int:
         if not root.children: return depth + 1
-        return sum(map(lambda node: self.count_nodes_in_tree(node, depth + 1), root.children.values()))
+        return sum(map(lambda node: self.sum_depths(node, depth + 1), root.children.values()))
     
     def minimumLengthEncoding(self, words: List[str]) -> int:
         trie = self.make_trie(map(reversed, words))
-        return self.count_nodes_in_tree(trie)
+        return self.sum_depths(trie)
