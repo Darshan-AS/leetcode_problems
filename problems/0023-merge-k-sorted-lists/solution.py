@@ -14,12 +14,12 @@ class Solution:
         merged_head = merged_curr = ListNode()
         
         for head_node in filter(None, lists):
-            p_queue.put((head_node.val, head_node))
+            p_queue.put(head_node)
         
         while not p_queue.empty():
-            _, node = p_queue.get()
+            node = p_queue.get()
             if node.next:
-                p_queue.put((node.next.val, node.next))
+                p_queue.put(node.next)
             
             merged_curr.next = node
             merged_curr = merged_curr.next
