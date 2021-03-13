@@ -1,14 +1,11 @@
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         m, n = len(matrix), len(matrix[0])
-        
-        val_at = lambda index: matrix[index // n][index - (index // n) * n]
-        
+            
         left, right = 0, m * n - 1
-        
         while left <= right:
             mid = (left + right) // 2
-            val = val_at(mid)
+            val = matrix[mid // n][mid % n]
             
             if target < val:
                 right = mid - 1
@@ -17,5 +14,4 @@ class Solution:
             else:
                 return True
         
-            
         return False
