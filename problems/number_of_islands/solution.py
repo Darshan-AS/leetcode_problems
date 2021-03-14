@@ -3,13 +3,11 @@ class Solution:
         m, n = len(grid), len(grid[0])
         
         def mark_island_as_visited(i, j):
-            if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] in ('v', '0'): return
+            if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] == '0': return
             
-            grid[i][j] = 'v'
-            mark_island_as_visited(i + 1, j)
-            mark_island_as_visited(i - 1, j)
-            mark_island_as_visited(i, j + 1)
-            mark_island_as_visited(i, j - 1)
+            grid[i][j] = '0'
+            for next_i, next_j in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
+                mark_island_as_visited(next_i, next_j)
         
         num_islands = 0
         for i, j in product(range(m), range(n)):
