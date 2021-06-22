@@ -1,15 +1,14 @@
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        triangle = []
         
-        if numRows == 0:
-            return triangle
+        def get_next_row(prev_row: Iterable[int]):
+            yield 1
+            for i in range(len(prev_row) - 1):
+                yield prev_row[i] + prev_row[i + 1]
+            yield 1
         
-        triangle.append([1])
-        for _ in range(1, numRows):
-            prev = triangle[-1]
-            
-            next = [prev[i] + prev[i + 1] for i in range(len(prev) - 1)]
-            triangle.append([1] + next + [1])
-        
-        return triangle
+        row = (1,)
+        yield row
+        for _ in range(numRows - 1):
+            row = tuple(get_next_row(row))
+            yield row
