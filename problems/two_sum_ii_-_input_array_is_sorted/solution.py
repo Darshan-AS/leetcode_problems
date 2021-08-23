@@ -1,16 +1,12 @@
-class Solution(object):
-    def twoSum(self, numbers, target):
-        """
-        :type numbers: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left, right = 0, len(numbers) - 1
+        while left < right:
+            sum_ = numbers[left] + numbers[right]
+            if sum_ > target:
+                right = right - 1
+            elif sum_ < target:
+                left = left + 1
+            else:
+                return [left + 1, right + 1]
         
-        pair_map = {}
-        
-        for index, value in enumerate(numbers):
-            required_pair = target - value
-            if required_pair in pair_map.keys():
-                return [pair_map[required_pair] + 1, index + 1]
-            
-            pair_map[value] = index
