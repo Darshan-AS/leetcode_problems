@@ -4,8 +4,8 @@ class Solution:
             return f'{real}+{img}i'
         
         def unmake_complex(cpx: str) -> (int, int):
-            real, img, *_ = cpx.split('+')
-            return int(real), int(img[:-1])
+            real, img, *_ = cpx[:-1].split('+')
+            return int(real), int(img)
         
         a1, b1 = unmake_complex(num1)
         a2, b2 = unmake_complex(num2)
