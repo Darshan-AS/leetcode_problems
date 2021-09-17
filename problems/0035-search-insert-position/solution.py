@@ -4,7 +4,6 @@ class Solution:
         
         while low <= high:
             mid = (low + high) // 2
-            print(low, high, mid)
             
             if target > nums[mid]:
                 low = mid + 1
