@@ -1,6 +1,9 @@
 class Solution:
     def reverseString(self, s: List[str]) -> None:
-        n = len(s)
-        for i in range(n // 2):
-            s[i], s[n - i - 1] = s[n - i - 1], s[i]
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        for i in range(len(s) // 2):
+            j = len(s) - i - 1
+            s[i], s[j] = s[j], s[i]
         
