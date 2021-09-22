@@ -1,20 +1,18 @@
 class Solution:
-    def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, new_color: int) -> List[List[int]]:
         old_color = image[sr][sc]
-        if newColor == old_color:
-            return image
+        new_image = deepcopy(image)
+        m, n = len(new_image), len(new_image[0])
         
-        def is_valid(i, j):
-            return True if 0  <= i < len(image) and 0 <= j < len(image[0]) else False
+        if new_color == old_color:
+            return new_image
         
-        def fill(x, y):
-            if image[x][y] == old_color:
-                image[x][y] = newColor
-                for i, j in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    if is_valid(x + i, y + j):
-                        fill(x + i, y + j)
-        fill(sr, sc)
-        return image
-    
-    def is_valid(self, image, i, j):
-        return True if 0  <= i < len(image) and 0 <= j < len(image[0]) else False
+        queue = collections.deque([(sr, sc)])
+        while queue:
+            r, c = queue.popleft()
+            new_image[r][c] = new_color
+            for dr, dc in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+                if 0 <= r + dr < m and 0 <= c + dc < n and new_image[r + dr][c + dc] == old_color:
+                    queue.append((r + dr, c + dc))
+        
+        return new_image
