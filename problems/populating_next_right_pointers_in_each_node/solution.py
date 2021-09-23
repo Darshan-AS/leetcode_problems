@@ -10,11 +10,11 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        if not (root and root.left and root.right): return root
+        if not root: return root
         
-        left_node, right_node = self.connect(root.left), self.connect(root.right)
-        while left_node and right_node:
-            left_node.next = right_node
-            left_node, right_node = left_node.right, right_node.left
-            
+        a, b = self.connect(root.left), self.connect(root.right)        
+        while a and b:
+            a.next = b
+            a, b = a.right, b.left
+        
         return root
