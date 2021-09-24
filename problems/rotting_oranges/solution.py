@@ -1,29 +1,25 @@
-from itertools import product
-from collections import deque
-
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        rotten_queue = deque()
-        fresh_count = 0
-        
         m, n = len(grid), len(grid[0])
-        for i, j in product(range(m), range(n)):
-            if grid[i][j] == 1:
-                fresh_count += 1
-            elif grid[i][j] == 2:
-                rotten_queue.append((i, j))
+        fresh_count = 0
+        rotten_set = set()
         
-        dirs = ((1, 0), (0, 1), (-1, 0), (0, -1))
+        for i, j in itertools.product(range(m), range(n)):
+            x = grid[i][j]
+            if x == 1: fresh_count += 1
+            if x == 2: rotten_set.add((i, j))
+        
         minutes = 0
-        while rotten_queue and fresh_count:
-            for _ in range(len(rotten_queue)):
-                rot_i, rot_j = rotten_queue.popleft()
-                for di, dj in dirs:
-                    i, j = rot_i + di, rot_j + dj
-                    if 0 <= i < m and 0 <= j < n and grid[i][j] == 1:
-                        grid[i][j] = 2
+        while rotten_set and fresh_count:
+            next_rotten_set = set()
+            for i, j in rotten_set:
+                for di, dj in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+                    i_, j_ = i + di, j + dj
+                    if 0 <= i_ < m and 0 <= j_ < n and grid[i_][j_] == 1:
+                        grid[i_][j_] = 2
                         fresh_count -= 1
-                        rotten_queue.append((i, j))
+                        next_rotten_set.add((i_, j_))
+            rotten_set = next_rotten_set
             minutes += 1
         
-        return -1 if fresh_count else minutes
+        return minutes if fresh_count == 0 else -1
