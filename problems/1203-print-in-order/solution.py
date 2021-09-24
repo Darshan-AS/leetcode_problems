@@ -1,22 +1,25 @@
 class Foo:
     def __init__(self):
-        self.n = 1
+        self.first_called = self.second_called = self.third_called = False
+
 
     def first(self, printFirst: 'Callable[[], None]') -> None:
-        while self.n != 1: pass
         # printFirst() outputs "first". Do not change or remove this line.
         printFirst()
-        self.n = 2
+        self.first_called = True
+
 
     def second(self, printSecond: 'Callable[[], None]') -> None:
-        while self.n != 2: pass
+        while not self.first_called: pass
+        
         # printSecond() outputs "second". Do not change or remove this line.
         printSecond()
-        self.n = 3
+        self.second_called = True
+
 
     def third(self, printThird: 'Callable[[], None]') -> None:
-        while self.n != 3: pass
+        while not self.second_called: pass
+        
         # printThird() outputs "third". Do not change or remove this line.
         printThird()
-        self.n = 1
-        
+        self.third_called = True
