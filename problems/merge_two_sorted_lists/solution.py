@@ -4,12 +4,15 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        head = curr = ListNode(-1)
+    def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        ll = curr = ListNode()
         while l1 and l2:
-            low, high = (l1, l2) if l1.val < l2.val else (l2, l1)
-            curr.next = low
+            if l1.val < l2.val:
+                curr.next = l1
+                l1 = l1.next
+            else:
+                curr.next = l2
+                l2 = l2.next
             curr = curr.next
-            l1, l2 = (l1.next, l2) if l1 == low else (l1, l2.next)
         curr.next = l1 if l1 else l2
-        return head.next
+        return ll.next
