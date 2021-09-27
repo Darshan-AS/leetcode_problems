@@ -1,8 +1,10 @@
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
-        @cache
-        def min_path(r: int=0, i: int=0) -> int:
-            if r >= len(triangle): return 0
-            return min(min_path(r + 1, i), min_path(r + 1, i + 1)) + triangle[r][i]
+        # Bottom up iterative DP
         
-        return min_path()
+        totals = tuple(triangle[-1])
+        while len(totals) != 1:
+            row = len(totals) - 1
+            totals = tuple(min(totals[i], totals[i + 1]) + triangle[row - 1][i] for i in range(row))
+        
+        return totals[0]
