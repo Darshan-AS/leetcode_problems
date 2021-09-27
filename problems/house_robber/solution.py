@@ -1,9 +1,6 @@
-from functools import reduce
-
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        def rob_next(res, v):
-            a, b = res
-            return (b, x) if (x := a + v) > b else (max(a, b), max(a, b))
-        
-        return reduce(rob_next, nums, (0, 0))[1]
+        a, b = 0, 0
+        for num in nums:
+            a, b = b, max(b, a + num)
+        return b
