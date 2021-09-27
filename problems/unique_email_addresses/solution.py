@@ -1,8 +1,8 @@
 class Solution:
     def numUniqueEmails(self, emails: List[str]) -> int:
-        def base_email(email: str) -> str:
-            local_name, domain_name, *_ = email.split('@')
-            base_local_name = ''.join(filter(lambda ch: ch != '.', local_name.split('+')[0]))
-            return base_local_name + '@' + domain_name
+        def normalize_email(email: str) -> str:
+            local_name, domain_name = email.split('@')
+            normalized_local_name = local_name.split('+')[0].replace('.', '')
+            return normalized_local_name + '@' + domain_name
         
-        return len(set(map(base_email, emails)))
+        return len(set(map(normalize_email, emails)))
