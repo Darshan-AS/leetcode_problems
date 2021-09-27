@@ -1,14 +1,11 @@
+from itertools import chain
+
 class Solution:
-    def generate(self, numRows: int) -> List[List[int]]:
+    def generate(self, n: int) -> List[List[int]]:
+        def pascals_triangle():
+            level = (1,)
+            while True:
+                yield level
+                level = tuple(chain((1,), (level[i] + level[i + 1] for i in range(len(level) - 1)), (1,)))
         
-        def get_next_row(prev_row: Iterable[int]):
-            yield 1
-            for i in range(len(prev_row) - 1):
-                yield prev_row[i] + prev_row[i + 1]
-            yield 1
-        
-        row = (1,)
-        yield row
-        for _ in range(numRows - 1):
-            row = tuple(get_next_row(row))
-            yield row
+        return list(itertools.islice(pascals_triangle(), n))
