@@ -7,11 +7,10 @@ class Solution:
             return all(1 <= int(k) <= 9 and v == 1 for k, v in Counter(filter(lambda ch: ch != '.', seq)).items())
 
         def rows(matrix: List[List]) -> Iterable[Iterable]:
-            yield from (iter(r) for r in matrix)
+            yield from map(iter, matrix)
 
         def cols(matrix: List[List]) -> Iterable[Iterable]:
-            m, n = len(matrix), len(matrix[0])
-            yield from ((matrix[i][j] for i in range(m)) for j in range(n))
+            yield from map(iter, zip(*matrix))
 
         def sub_matrices(matrix: List[List], sm: int, sn: int) -> Iterable[Iterable]:
             m, n = len(matrix), len(matrix[0])
