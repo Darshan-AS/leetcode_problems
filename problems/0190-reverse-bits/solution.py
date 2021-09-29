@@ -1,7 +1,5 @@
 class Solution:
-    # @param n, an integer
-    # @return an integer
-    def reverseBits(self, n):
+    def reverseBits(self, n: int) -> int:
         i = n
         reverse_n = 0
         for _ in range(32):
