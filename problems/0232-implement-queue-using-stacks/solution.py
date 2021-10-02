@@ -1,49 +1,28 @@
-class MyQueue(object):
+class MyQueue:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.stack_1, self.stack_2 = [], []
-        
+        self.front_stack = []
+        self.back_stack = []
 
-    def push(self, x):
-        """
-        Push element x to the back of queue.
-        :type x: int
-        :rtype: None
-        """
-        self.stack_1.append(x)
-        
+    def push(self, x: int) -> None:
+        self.front_stack.append(x)
 
-    def pop(self):
-        """
-        Removes the element from in front of queue and returns that element.
-        :rtype: int
-        """
+    def pop(self) -> int:
         self.peek()
-        return self.stack_2.pop()
+        return self.back_stack.pop()
+
+    def peek(self) -> int:
+        if not self.back_stack:
+            self.__flip_front_to_back()
         
+        return self.back_stack[-1]
 
-    def peek(self):
-        """
-        Get the front element.
-        :rtype: int
-        """
-        if not self.stack_2:
-            while self.stack_1:
-                self.stack_2.append(self.stack_1.pop())
-            
-        return self.stack_2[-1]
-        
-
-    def empty(self):
-        """
-        Returns whether the queue is empty.
-        :rtype: bool
-        """
-        return len(self.stack_1) + len(self.stack_2) == 0
-
+    def empty(self) -> bool:
+        return not (self.front_stack or self.back_stack)
+    
+    def __flip_front_to_back(self) -> None:
+        while self.front_stack:
+            self.back_stack.append(self.front_stack.pop())
 
 # Your MyQueue object will be instantiated and called as such:
 # obj = MyQueue()
