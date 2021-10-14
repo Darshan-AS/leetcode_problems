@@ -6,8 +6,8 @@ class Solution:
             if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] == '0': return
             
             grid[i][j] = '0'
-            for next_i, next_j in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
-                mark_island_as_visited(next_i, next_j)
+            for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                mark_island_as_visited(i + di, j + dj)
         
         num_islands = 0
         for i, j in product(range(m), range(n)):
