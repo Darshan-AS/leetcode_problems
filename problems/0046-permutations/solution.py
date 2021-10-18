@@ -12,7 +12,14 @@ class Solution:
                 yield ()
                 return
 
-            for i, x in enumerate(pool):
-                yield from ((x,) + p for p in permutations(pool[:i] + pool[i + 1 :], r - 1))
+            yield from permutations(pool[:-1], r)
+            yield from (
+                p[:i] + (pool[-1],) + p[i:]
+                for p in permutations(pool[:-1], r - 1)
+                for i in range(len(p), -1, -1)
+            )
+            
+            # for i, x in enumerate(pool):
+            #     yield from ((x,) + p for p in permutations(pool[:i] + pool[i + 1 :], r - 1))
         
         return list(permutations(nums))
