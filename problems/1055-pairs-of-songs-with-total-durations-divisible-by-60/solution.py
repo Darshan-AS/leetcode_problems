@@ -3,9 +3,6 @@ class Solution:
         seen = collections.defaultdict(int)
         count = 0
         for t in map(lambda t: t % 60, time):
-            if t == 0:
-                count += seen[0]
-            elif 60 - t in seen:
-                count += seen[60 - t]
+            count += seen[(60 - t) % 60]
             seen[t] += 1
         return count
