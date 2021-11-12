@@ -6,14 +6,8 @@ class Solution:
             7: 'pqrs', 8: 'tuv', 9: 'wxyz'
         }
         
-        def letter_combs(index, comb):
-            if index == len(digits):
-                yield ''.join(comb)
-                return
-            
-            for ch in telephone_map[int(digits[index])]:
-                comb.append(ch)
-                yield from letter_combs(index + 1, comb)
-                comb.pop()
+        combs = ['']
+        for d in digits:
+            combs = [c + ch for c in combs for ch in telephone_map[int(d)]]
         
-        return list(letter_combs(0, [])) if digits else []
+        return combs if digits else []
