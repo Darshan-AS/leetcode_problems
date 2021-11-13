@@ -1,7 +1,3 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        steps = 0
-        for num in reversed(nums):
-            if num >= steps: steps = 0
-            steps += 1
-        return steps == 1
+        return reduce(lambda s, n: 1 if n >= s else s + 1, reversed(nums), 0) == 1
