@@ -1,16 +1,17 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        ans_i, ans_j = 0, 1
-        
-        for k in range(2 * len(s) - 1):
-            x = k // 2
-            i = x if k % 2 else x - 1
-            j = x + 1
-            
-            while i >= 0. and j < len(s) and  s[i] == s[j]:
+        def expand_palindrome(start: int, end: int) -> tuple[int, int]:
+            i, j = start, end
+            while i >= 0 and j < len(s) and s[i] == s[j]:
                 i, j = i - 1, j + 1
-                
-            if j - i - 1 > ans_j - ans_i:
-                ans_i, ans_j = i + 1, j
-            
-        return s[ans_i:ans_j]
+            return i + 1, j - 1
+        
+        i, j = max(
+            chain.from_iterable(
+                (expand_palindrome(i, i), expand_palindrome(i, i + 1))
+                for i in range(len(s))
+            ),
+            key=lambda x: x[1] - x[0],
+        )
+        
+        return s[i: j + 1]
