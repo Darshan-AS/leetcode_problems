@@ -4,26 +4,24 @@
 #         self.val = val
 #         self.next = next
 
-ListNode.__lt__ = lambda self, other: self.val < other.val
-ListNode.__eq__ = lambda self, other: self.val == other.val
-
 from queue import PriorityQueue
 
+ListNode.__lt__ = lambda self, x: self.val < x.val
+
 class Solution:
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        dummy_head = curr = ListNode()
-        pq = PriorityQueue()
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        p_queue = PriorityQueue()
+        merged_head = merged_curr = ListNode()
         
-        id = lambda x: x
+        for head_node in filter(None, lists):
+            p_queue.put(head_node)
         
-        for l in filter(id, lists):
-            pq.put((l.val, l))
+        while not p_queue.empty():
+            node = p_queue.get()
+            if node.next:
+                p_queue.put(node.next)
+            
+            merged_curr.next = node
+            merged_curr = merged_curr.next
         
-        while not pq.empty():
-            val, node = pq.get()
-            curr.next = ListNode(val)
-            curr = curr.next
-            node = node.next
-            if node: pq.put((node.val, node))
-        
-        return dummy_head.next
+        return merged_head.next
