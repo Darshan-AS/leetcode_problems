@@ -1,6 +1,15 @@
+from itertools import islice
+from collections import deque
+
 class Solution:
     def tribonacci(self, n: int) -> int:
-        fib_queue = collections.deque([0, 1, 1], maxlen=3)
-        for _ in range(3, n + 1):
-            fib_queue.append(sum(fib_queue))
-        return fib_queue[-1] if n >= 3 else fib_queue[n]
+        def trib():
+            trib_queue = deque([0, 1, 1], maxlen=3)
+            sum_ = sum(trib_queue)
+            while True:
+                k = trib_queue.popleft()
+                yield k
+                trib_queue.append(sum_)
+                sum_ = sum_ + sum_ - k
+                
+        return next(islice(trib(), n, None))
