@@ -9,21 +9,25 @@ class Solution:
 class DSU:
     def __init__(self, xs: iter = None) -> None:
         self.parents = {x: x for x in xs} if xs else {}
+        self.sizes = {x: 1 for x in xs} if xs else {}
     
     def add(self, x: Any) -> None:
         if x in self.parents: return
         self.parents[x] = x
+        self.sizes[x] = 1
     
     def find_root(self, x: Any) -> Any:
-        while self.parents[x] != x:
-            x = self.parents[x]
-        return x
+        if self.parents[x] != x:
+            self.parents[x] = self.find_root(self.parents[x])
+        return self.parents[x]
         
     def union(self, u: Any, v: Any) -> None:
         ur = self.find_root(u)
         vr = self.find_root(v)
         
-        self.parents[ur] = vr
+        low, high = (ur, vr) if self.sizes[ur] < self.sizes[vr] else (vr, ur)
+        self.parents[low] = high
+        self.sizes[high] += self.sizes[low]
     
     def find(self, u: Any, v: Any) -> bool:
         ur = self.find_root(u)
