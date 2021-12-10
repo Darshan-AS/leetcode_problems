@@ -1,15 +1,42 @@
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        g = defaultdict(set)
-        
-        def connected(x, y, seen) -> bool:
-            if x == y: return True
-            seen.add(x)
-            return any(connected(z, y, seen) for z in g[x] if z not in seen)
-        
+        dsu = DSU()
         for u, v in edges:
-            if u in g and v in g and connected(u, v, set()):
+            if dsu.safe_find(u, v):
                 return [u, v]
-            g[u].add(v)
-            g[v].add(u)
+            dsu.safe_union(u, v)
+    
+class DSU:
+    def __init__(self, xs: iter = None) -> None:
+        self.parents = {x: x for x in xs} if xs else {}
+    
+    def add(self, x: Any) -> None:
+        if x in self.parents: return
+        self.parents[x] = x
+    
+    def find_root(self, x: Any) -> Any:
+        while self.parents[x] != x:
+            x = self.parents[x]
+        return x
+        
+    def union(self, u: Any, v: Any) -> None:
+        ur = self.find_root(u)
+        vr = self.find_root(v)
+        
+        self.parents[ur] = vr
+    
+    def find(self, u: Any, v: Any) -> bool:
+        ur = self.find_root(u)
+        vr = self.find_root(v)
+        return ur == vr
+    
+    def safe_union(self, u: Any, v: Any) -> None:
+        self.add(u)
+        self.add(v)
+        self.union(u, v)
+    
+    def safe_find(self, u: Any, v: Any) -> bool:
+        self.add(u)
+        self.add(v)
+        return self.find(u, v)
         
