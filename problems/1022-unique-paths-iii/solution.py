@@ -1,25 +1,31 @@
-from itertools import product
-
 class Solution:
     def uniquePathsIII(self, grid: List[List[int]]) -> int:
-        n, m = len(grid), len(grid[0])
-        start = end = None
-        free_spot_count = 0
-        for i, j in product(range(n), range(m)):
-            x = grid[i][j]
-            if x == 1: start = (i, j)
-            elif x == 2: end = (i, j)
-            elif x == 0: free_spot_count += 1
         
-        def count_paths(i, j, rem):
-            if i < 0 or i >= n or j < 0 or j >= m or grid[i][j] in (-1, -2): return 0
-            if grid[i][j] == 2: return 0 if rem else 1
+        def count_paths(start: tuple[int, int], end: tuple[int, int], empty_counts: int, seen: set=None) -> int:
+            seen = seen if seen else set()
+            x, y = start
+            if x < 0 or x >= m or y < 0 or y >= n or start in seen or grid[x][y] == -1:
+                return 0
             
-            grid[i][j] = -2
-            path_count = 0
-            for di, dj in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
-                path_count += count_paths(i + di, j + dj, rem - 1)
-            grid[i][j] = 0
+            seen.add(start)
+            
+            path_count = sum(
+                count_paths((x + dx, y + dy), end, empty_counts - 1, seen)
+                for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1))
+            ) if start != end else (0 if empty_counts else 1)
+            
+            seen.remove(start)
+            
             return path_count
         
-        return count_paths(*start, free_spot_count + 1)
+        
+        m, n = len(grid), len(grid[0])
+        start_ = end_ = (0, 0)
+        empty_counts_ = 1 # Include start
+        for i, j in product(range(m), range(n)):
+            x = grid[i][j]
+            if x == 1: start_ = (i, j)
+            elif x == 2: end_ = (i, j)
+            elif x == 0: empty_counts_ += 1
+        
+        return count_paths(start_, end_, empty_counts_)
