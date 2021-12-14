@@ -8,6 +8,6 @@ class Solution:
             prev = dp[0]
             dp[0] = prev + 1
             for j in range(len2):
-                prev, dp[j + 1] = dp[j + 1], prev if word1[i] == word2[j] else min(dp[j] + 1, dp[j + 1] + 1, prev + 2)
+                prev, dp[j + 1] = dp[j + 1], prev if word1[i] == word2[j] else min(dp[j + 1], dp[j]) + 1
                     
         return dp[-1]
