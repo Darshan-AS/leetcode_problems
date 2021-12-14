@@ -4,7 +4,7 @@ class Solution:
         for x in range(len(s)):            
             a, b = b, (
                 (b if int(s[x]) else 0) +
-                (a if x > 0 and int(s[x - 1]) and int(s[x - 1: x + 1]) <= 26 else 0)
+                (a if x > 0 and 10 <= int(s[x - 1: x + 1]) <= 26 else 0)
             )
         
         return b
