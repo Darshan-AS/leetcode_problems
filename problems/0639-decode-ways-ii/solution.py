@@ -3,28 +3,31 @@ class Solution:
         M = 1_000_000_007
         
         n = len(s)
-        dp = [0, 1] + [0] * n
+        a, b = 0, 1
         
         for x in range(n):
             i = x + 2
+            b_ = b
             
             prev_ch, ch = s[x - 1] if x else '0', s[x]
             
             if ch == '*':
-                dp[i] = (dp[i - 1] * 9) % M
+                b = (b * 9) % M
                 if prev_ch == '1':
-                    dp[i] = (dp[i] + dp[i - 2] * 9) % M
+                    b = (b + a * 9) % M
                 elif prev_ch == '2':
-                    dp[i] = (dp[i] + dp[i - 2] * 6) % M
+                    b = (b + a * 6) % M
                 elif prev_ch == '*':
-                    dp[i] = (dp[i] + dp[i - 2] * 15) % M
+                    b = (b + a * 15) % M
             else:
-                dp[i] = dp[i - 1] if ch != '0' else 0
+                b = b if ch != '0' else 0
                 if prev_ch == '1':
-                    dp[i] = (dp[i] + dp[i - 2]) % M
+                    b = (b + a) % M
                 elif prev_ch == '2':
-                    dp[i] = (dp[i] + dp[i - 2] * (1 if ch <= '6' else 0)) % M
+                    b = (b + a * (1 if ch <= '6' else 0)) % M
                 elif prev_ch == '*':
-                    dp[i] = (dp[i] + dp[i - 2] * (2 if ch <= '6' else 1)) % M
+                    b = (b + a * (2 if ch <= '6' else 1)) % M
+            
+            a, b = b_, b
         
-        return dp[-1]
+        return b
