@@ -1,12 +1,14 @@
-from functools import reduce
 from bisect import bisect_left
 
 class Solution:
-    def mincostTickets(self, days: List[int], costs: List[int]) -> int:        
-        @lru_cache
-        def dp(index):
-            if index >= len(days): return 0
-            day = days[index]
-            return min(dp(bisect_left(days, day + d)) + c for d, c in zip((1, 7, 30), costs))
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        pass_days = [1, 7, 30]
         
-        return dp(0)
+        @cache
+        def min_cost(day_index: int) -> int:
+            return min(
+                min_cost(bisect_left(days, days[day_index] + d, day_index)) + c
+                for d, c in zip(pass_days, costs)
+            ) if day_index < len(days) else 0
+        
+        return min_cost(0)
