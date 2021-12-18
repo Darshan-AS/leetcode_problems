@@ -1,12 +1,14 @@
 class Solution:
-    def maximumDetonation(self, bombs: List[List[int]]) -> int:
-        dist = lambda p1, p2: math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
-        
+    def maximumDetonation(self, bombs: List[List[int]]) -> int:        
         n = len(bombs)
         
         g = {
-            i: [j for j in range(n) if i != j and dist(bombs[i][:-1], bombs[j][:-1]) <= bombs[i][-1]]
-            for i in range(n)
+            i: [
+                j
+                for j, (x2, y2, _) in enumerate(bombs)
+                if i != j and (y2 - y1) ** 2 + (x2 - x1) ** 2 <= r1 ** 2
+            ]
+            for i, (x1, y1, r1) in enumerate(bombs)
         }
         
         def connections(root, seen=None):
