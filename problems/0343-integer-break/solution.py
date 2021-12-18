@@ -1,10 +1,12 @@
 class Solution:
     def integerBreak(self, num: int) -> int:
-        @cache
-        def int_break(n: int) -> int:
-            return max(
-                max(int_break(n - i), n - i) * i
-                for i in range(1, n // 2 + 1)
-            ) if n > 1 else 1
+        if num <= 3: return num - 1
         
-        return int_break(num)
+        q, r = divmod(num, 3)
+        
+        if r == 0:
+            return 3 ** q
+        elif r == 1:
+            return 3 ** (q - 1) * 4
+        elif r == 2:
+            return 3 ** q * 2
