@@ -7,24 +7,19 @@
 class BSTIterator:
 
     def __init__(self, root: Optional[TreeNode]):
-        self.root = root
-        self.vals_gen = BSTIterator.inorder(self.root)
+        self.stack = [root] if root else []
 
     def next(self) -> int:
-        return next(self.vals_gen)
+        while self.stack:
+            node = self.stack.pop()
+            if not node.right and not node.left: return node.val
+            
+            if node.right: self.stack.append(node.right)
+            self.stack.append(TreeNode(node.val))
+            if node.left: self.stack.append(node.left)
 
     def hasNext(self) -> bool:
-        x = next(self.vals_gen, None)
-        if x is not None:
-            self.vals_gen = chain((x,), self.vals_gen)
-        return x is not None
-    
-    @staticmethod
-    def inorder(root):
-        if not root: return
-        yield from BSTIterator.inorder(root.left)
-        yield root.val
-        yield from BSTIterator.inorder(root.right)
+        return len(self.stack) > 0
         
 
 
