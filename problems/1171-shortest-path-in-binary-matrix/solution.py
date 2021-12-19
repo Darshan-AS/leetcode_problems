@@ -3,7 +3,7 @@ class Solution:
         m, n = len(grid), len(grid[0])
         
         visited = {(0, 0)}
-        queue = collections.deque([(0, 0, 1)] if grid[0][0] == 0 or grid[m - 1][n - 1] else [])
+        queue = collections.deque([(0, 0, 1)] if grid[0][0] == 0 else [])
         
         while queue:
             i, j, length = queue.popleft()
