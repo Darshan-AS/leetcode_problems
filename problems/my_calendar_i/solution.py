@@ -5,14 +5,11 @@ class MyCalendar:
 
     def book(self, start: int, end: int) -> bool:
         event = (start, end)
-
-        i = bisect.bisect(self.__events, event)
-        if (i < len(self.__events) and self.__overlaps(event, self.__events[i    ])) or (
-            i > 0                  and self.__overlaps(event, self.__events[i - 1])
-        ):
-            return False
-
-        self.__events.insert(i, event)
+        overlaps_with_event = partial(self.__overlaps, event)
+        
+        if any(map(overlaps_with_event, self.__events)): return False
+        
+        self.__events.append(event)
         return True
 
     def __overlaps(self, e1: tuple[int, int], e2: tuple[int, int]) -> bool:
