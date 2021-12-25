@@ -8,10 +8,8 @@ class MyCalendarTwo:
     def book(self, start: int, end: int) -> bool:
         self.__events_count[start] = self.__events_count.get(start, 0) + 1
         self.__events_count[end] = self.__events_count.get(end, 0) - 1
-        
-        max_overlap = max(accumulate(self.__events_count.values()))
-        
-        if max_overlap >= 3:
+                
+        if 3 in accumulate(self.__events_count.values()):
             self.__events_count[start] -= 1
             self.__events_count[end] += 1
             return False
