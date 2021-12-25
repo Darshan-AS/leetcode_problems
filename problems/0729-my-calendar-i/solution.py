@@ -1,15 +1,20 @@
-class MyCalendar:
+from sortedcontainers import SortedList
 
+class MyCalendar:
     def __init__(self):
-        self.__events = []
+        self.__events = SortedList()
 
     def book(self, start: int, end: int) -> bool:
         event = (start, end)
-        overlaps_with_event = partial(self.__overlaps, event)
-        
-        if any(map(overlaps_with_event, self.__events)): return False
-        
-        self.__events.append(event)
+        i = self.__events.bisect_left(event)
+
+        n = len(self.__events)
+        if (i < n and self.__overlaps(event, self.__events[i])) or (
+            i > 0 and self.__overlaps(event, self.__events[i - 1])
+        ):
+            return False
+
+        self.__events.add(event)
         return True
 
     def __overlaps(self, e1: tuple[int, int], e2: tuple[int, int]) -> bool:
