@@ -14,19 +14,28 @@ class Solution:
 
             old_center, old_radius = 0, 0
             for center in range(len(seq)):
+                
                 radius = 0
-                if center <= old_center:
-                    r = radius_map[old_center - 2 * center]
-                    if r < old_radius:
-                        radius = r
-                    elif r > old_radius:
-                        radius = old_radius
+                if center <= old_center + old_radius:
+                    mirrored_center = old_center - (center - old_center)
+                    mirrored_radius = radius_map[mirrored_center]
+                    
+                    old_end = old_center + old_radius
+                    end = center + mirrored_radius
+                    
+                    max_radius = old_center + old_radius - center
+                    
+                    if end < old_end:
+                        radius = mirrored_radius
+                    elif end > old_end:
+                        radius = max_radius
                     else:
-                        radius = expand_palindrome_around(seq, center, r)
+                        radius = expand_palindrome_around(seq, center, mirrored_radius)
                 else:
                     radius = expand_palindrome_around(seq, center)
+                
                 radius_map[center] = radius
-                old_center, old_radius = center, radius
+                old_radius, old_center = max((old_radius, old_center), (radius, center))
 
             return [((c - r) // 2, ((c + r) // 2) - 1) for c, r in enumerate(radius_map) if r]
 
