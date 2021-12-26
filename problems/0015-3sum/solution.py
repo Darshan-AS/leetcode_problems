@@ -1,17 +1,26 @@
 class Solution:
-    def threeSum(self, nums_: List[int]) -> List[List[int]]:        
+    def threeSum(self, nums_: List[int]) -> List[List[int]]:  
         def two_sum(nums, target, start=0, end=None):
             end = end if end else len(nums)
-            seen = set()
-            for num in nums[start:end]:
-                if target - num in seen:
-                    yield (num, target - num)
+            
+            left, right = start, end - 1
+            while left < right:
+                sum_ = nums[left] + nums[right]
+                
+                if target > sum_ or (left > start and nums[left] == nums[left - 1]):
+                    left += 1
+                elif target < sum_ or (right < end - 1 and nums[right] == nums[right + 1]):
+                    right -= 1
                 else:
-                    seen.add(num)
+                    yield (nums[left], nums[right])
+                    left += 1
+                    right -= 1
+                    
         
         def three_sum(nums, target, start=0, end=None):
             end = end if end else len(nums)
-            for i in range(start, end):
-                yield from (s + (nums[i],) for s in two_sum(nums, target - nums[i], start=i + 1))
+            for i, num1 in enumerate(nums):
+                if i > 0 and nums[i] == nums[i - 1]: continue
+                yield from ((num1, num2, num3) for num2, num3 in two_sum(nums, target - num1, start = i + 1))
         
-        return set(map(lambda s: tuple(sorted(s)), three_sum(nums_, 0)))
+        return list(three_sum(sorted(nums_), 0))
