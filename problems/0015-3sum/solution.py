@@ -19,8 +19,9 @@ class Solution:
         
         def three_sum(nums, target, start=0, end=None):
             end = end if end else len(nums)
-            for i, num1 in enumerate(nums):
+            for i in range(start, end):
                 if i > 0 and nums[i] == nums[i - 1]: continue
+                num1 = nums[i]
                 yield from ((num1, num2, num3) for num2, num3 in two_sum(nums, target - num1, start = i + 1))
         
         return list(three_sum(sorted(nums_), 0))
