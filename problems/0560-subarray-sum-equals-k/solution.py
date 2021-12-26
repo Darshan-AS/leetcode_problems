@@ -1,11 +1,10 @@
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        sum_seen = defaultdict(int)
+        sum_seen = defaultdict(int, {0: 1}) # {sum: no of times ecountered}
         
-        sum_seen[0] = 1
-        count = curr_sum = 0
-        for i in nums:
-            curr_sum += i
+        curr_sum = count = 0
+        for num in nums:
+            curr_sum += num
             count += sum_seen[curr_sum - k]
             sum_seen[curr_sum] += 1
         
