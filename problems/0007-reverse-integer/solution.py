@@ -1,9 +1,16 @@
 class Solution:
-    def reverse(self, original_x: int) -> int:
-        x, new_x = abs(original_x), 0
-        while x:
-            new_x = new_x * 10 + x % 10
-            x = x // 10
-            
-        if new_x > 2 ** 31: return 0
-        return new_x if original_x >= 0 else -new_x
+    def reverse(self, x: int) -> int:
+        def digits(n: int) -> Iterator[int]:
+            while n:
+                yield n % 10
+                n = n // 10
+        
+        def undigits(ints: Iterator[int], max_n: int = None) -> int:
+            n = 0
+            for i in ints:
+                if n > (max_n - i) // 10: return 0
+                n = (n * 10) + i
+            return n
+        
+        return undigits(digits(abs(x)), max_n=2 ** 31) * (1 if x >= 0 else -1)
+        
