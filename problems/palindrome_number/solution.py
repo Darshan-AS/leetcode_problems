@@ -1,10 +1,14 @@
 class Solution:
     def isPalindrome(self, x: int) -> bool:
-        if x < 0 or (x % 10 == 0 and x != 0): return False
+        def rev_digits(n: int) -> Iterator[int]:
+            while n:
+                yield n % 10
+                n //= 10
         
-        reverse_x = 0
-        while x > reverse_x:
-            reverse_x = reverse_x * 10 + x % 10
-            x = x // 10
-            
-        return x == reverse_x or x == reverse_x // 10
+        def undigits(ints: Iterable[int]) -> int:
+            n = 0
+            for i in ints:
+                n = n * 10 + i
+            return n
+        
+        return x == undigits(rev_digits(abs(x)))
