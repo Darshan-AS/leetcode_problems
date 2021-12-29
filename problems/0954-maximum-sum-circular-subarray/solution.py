@@ -1,15 +1,9 @@
 class Solution:
-    def maxSubarraySumCircular(self, A: List[int]) -> int:
-        global_max = local_max = float('-inf')
-        for i in A:
-            local_max = i + max(local_max, 0)
-            global_max = max(global_max, local_max)
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        max_sum = max(accumulate(nums, lambda a, x: max(a, 0) + x))
+        min_sum = min(accumulate(nums, lambda a, x: min(a, 0) + x))
         
-        global_min = local_min = float('inf')
-        for i in A:
-            local_min = i + min(local_min, 0)
-            global_min = min(global_min, local_min)
-        
-        global_max_1 = global_max
-        global_max_2 = sum(A) - global_min
-        return max(global_max_1, global_max_2) if global_max_2 else global_max_1
+        single_interval_max = max_sum
+        double_interval_max = sum(nums) - min_sum
+
+        return max(single_interval_max, double_interval_max) if double_interval_max else single_interval_max
