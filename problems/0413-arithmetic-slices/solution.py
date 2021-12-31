@@ -1,7 +1,10 @@
 class Solution:
     def numberOfArithmeticSlices(self, nums: List[int]) -> int:
-        diffs = map(operator.sub, islice(nums, 1, None), nums)
-        slices = (s for _, s in groupby(diffs))
-        slices_len = map(lambda s: sum(1 for _ in s) + 1, slices) # +1 due to diff-slice having len - 1
-        return sum((n * (n + 1) // 2) - n - (n - 1) for n in slices_len)
+        n = len(nums)
+        dp = [0] * n
+        
+        for i in range(2, n):
+            dp[i] = dp[i - 1] + 1 if nums[i] - nums[i - 1] == nums[i - 1] - nums[i - 2] else 0
+        
+        return sum(dp)
 
