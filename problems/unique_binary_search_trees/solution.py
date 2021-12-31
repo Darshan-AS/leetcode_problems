@@ -1,5 +1,4 @@
 class Solution:
-    @lru_cache(None)
     def numTrees(self, n: int) -> int:
-        if n == 0 or n == 1: return 1
-        return sum(self.numTrees(i) * self.numTrees(n - i - 1) for i in range(n))
+        # nth Catalan number
+        return round(reduce(operator.mul, map(lambda k: (n + k) / k, range(2, n + 1)), 1))
