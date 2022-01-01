@@ -1,10 +1,9 @@
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
-        # Bottom up iterative DP
+        # Top down iterative DP
         
-        totals = tuple(triangle[-1])
-        while len(totals) != 1:
-            row = len(totals) - 1
-            totals = tuple(min(totals[i], totals[i + 1]) + triangle[row - 1][i] for i in range(row))
+        dp = (0, 0)
+        for i in range(len(triangle)):
+            dp = (math.inf, *(min(dp[j], dp[j + 1]) + triangle[i][j] for j in range(i + 1)), math.inf)
         
-        return totals[0]
+        return min(dp)
