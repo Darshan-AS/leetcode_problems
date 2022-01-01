@@ -7,7 +7,8 @@ class Solution:
         for i in range(m):
             prev, dp[0] = dp[0], dp[0] + 1
             for j in range(n):
-                prev, dp[j + 1] = dp[j + 1], prev if word1[i] == word2[j] else min(prev, dp[j + 1], dp[j]) + 1
+                k = j + 1
+                prev, dp[k] = dp[k], prev if word1[i] == word2[j] else min(prev, dp[k - 1], dp[k]) + 1
         
         return dp[-1]
 
