@@ -12,7 +12,7 @@ class Solution:
             seq = "|".join(chain(("",), seq, ("",)))
             radius_map = [0] * len(seq)
 
-            old_center, old_radius = 0, 0
+            old_center, old_radius = -1, -1
             for center in range(len(seq)):
                 
                 radius = 0
@@ -35,7 +35,7 @@ class Solution:
                     radius = expand_palindrome_around(seq, center)
                 
                 radius_map[center] = radius
-                old_radius, old_center = max((old_radius, old_center), (radius, center))
+                old_center, old_radius = max((old_center, old_radius), (center, radius), key=sum)
 
             return [((c - r) // 2, ((c + r) // 2) - 1) for c, r in enumerate(radius_map) if r]
 
