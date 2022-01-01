@@ -1,18 +1,43 @@
 class Solution:
-    def count_palindrome_around_center(self, s: str, left: int, right: int) -> int:
-        n = len(s)
-        
-        while left >= 0 and right < n and s[left] == s[right]:
-            left -= 1
-            right += 1
-        
-        return ceil((right - left - 1) / 2)
-    
     def countSubstrings(self, s: str) -> int:
-        return sum(
-            self.count_palindrome_around_center(s, i, i) + 
-            self.count_palindrome_around_center(s, i, i + 1) 
-            for i in range(len(s))
-        )
-            
+        # Manacher's Algorithm
+        def expand_palindrome_around(seq: Sequence, center: int, radius: int = 0) -> int:
+            n = len(seq)
+            i, j = center - radius, center + radius
+            while 0 <= i <= j < n and seq[i] == seq[j]:
+                i, j = i - 1, j + 1
+            return j - center - 1
+
+        def palindrome_intervals(seq: Sequence):
+            seq = "|".join(chain(("",), seq, ("",)))
+            radius_map = [0] * len(seq)
+
+            old_center, old_radius = -1, -1
+            for center in range(len(seq)):
+                
+                radius = 0
+                if center <= old_center + old_radius:
+                    mirrored_center = old_center - (center - old_center)
+                    mirrored_radius = radius_map[mirrored_center]
+                    
+                    old_end = old_center + old_radius
+                    end = center + mirrored_radius
+                    
+                    max_radius = old_center + old_radius - center
+                    
+                    if end < old_end:
+                        radius = mirrored_radius
+                    elif end > old_end:
+                        radius = max_radius
+                    else:
+                        radius = expand_palindrome_around(seq, center, mirrored_radius)
+                else:
+                    radius = expand_palindrome_around(seq, center)
+                
+                radius_map[center] = radius
+                old_center, old_radius = max((old_center, old_radius), (center, radius), key=sum)
+
+            return [((c - r) // 2, ((c + r) // 2) - 1) for c, r in enumerate(radius_map) if r]
+
+        return sum(math.ceil((j - i + 1) / 2) for i, j in palindrome_intervals(s))
 
