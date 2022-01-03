@@ -1,17 +1,14 @@
 class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
-        def combinations(iterable: iter, r: int):
-            pool = tuple(iterable)
-            n = len(pool)
-            
-            if r > n:
-                return
-
-            if r < 1 or not pool:
+        def combinations(pool: list, r: int, index: int=0):
+            if r == 0:
                 yield ()
                 return
+            
+            if not (0 < r <= len(pool) and 0 <= index < len(pool)):
+                return
 
-            yield from combinations(pool[:-1], r)
-            yield from (c + (pool[-1],) for c in combinations(pool[:-1], r - 1))
+            yield from (chain((pool[index],), c) for c in combinations(pool, r - 1, index + 1))
+            yield from combinations(pool, r, index + 1)
         
-        return list(combinations(range(1, n + 1), k))
+        return list(map(list, combinations(list(range(1, n + 1)), k)))
