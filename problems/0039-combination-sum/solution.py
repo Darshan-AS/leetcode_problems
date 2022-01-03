@@ -1,15 +1,16 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:        
-        def find_sum(index, selected, rem_target):
+        def combination_sum(index: int, rem_target: int):
             if rem_target == 0:
-                yield selected.copy()
+                yield ()
+                return
             
-            if rem_target < 0: return
+            if not (0 <= rem_target and 0 <= index < len(candidates)):
+                return
             
-            for i in range(index, len(candidates)):
-                selected.append(candidates[i])
-                yield from find_sum(i, selected, rem_target - candidates[i])
-                selected.pop()
+            x = candidates[index]
+            yield from (chain((x,), c) for c in combination_sum(index, rem_target - x))
+            yield from combination_sum(index + 1, rem_target)
             
-        return list(find_sum(0, [], target))
+        return list(map(list, combination_sum(0, target)))
 
