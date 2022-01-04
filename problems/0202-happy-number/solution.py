@@ -1,8 +1,12 @@
 class Solution:
     def isHappy(self, n: int) -> bool:
-        seen = set()
-        while n != 1 and n not in seen:
-            seen.add(n)
-            n = sum(map(lambda num: num * num, map(int, str(n))))
-        return n == 1
+        # Floyd's Cycle-Finding Algorithm
+        get_next = lambda x: sum(map(lambda num: num * num, map(int, str(x))))
+        
+        walker, runner = n, get_next(n)
+        while runner != 1 and runner != walker:
+            walker = get_next(walker)
+            runner = get_next(get_next(runner))
+        
+        return runner == 1
         
