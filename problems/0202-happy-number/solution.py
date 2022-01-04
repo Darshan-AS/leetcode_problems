@@ -1,12 +1,12 @@
 class Solution:
     def isHappy(self, n: int) -> bool:
-        # Floyd's Cycle-Finding Algorithm
+        # There is only one cycle possible
+        cycle_numbers = {4, 16, 37, 58, 89, 145, 42, 20}
+        
         get_next = lambda x: sum(map(lambda num: num * num, map(int, str(x))))
         
-        walker, runner = n, get_next(n)
-        while runner != 1 and runner != walker:
-            walker = get_next(walker)
-            runner = get_next(get_next(runner))
+        while n != 1 and n not in cycle_numbers:
+            n = get_next(n)
         
-        return runner == 1
+        return n == 1
         
