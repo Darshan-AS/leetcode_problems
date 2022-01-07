@@ -5,18 +5,16 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def maxPathSum(self, root: TreeNode) -> int:
-        self.max_sum = float('-inf')
-        
-        def depth_first_sum(node):
-            if not node:
-                return 0
+    def maxPathSum(self, root_: Optional[TreeNode]) -> int:
+        def max_path_sum(root: Optional[TreeNode]) -> tuple[int, int]:
+            if not root: return (-math.inf, -math.inf)
             
-            l_max_sum = max(depth_first_sum(node.left), 0)
-            r_max_sum = max(depth_first_sum(node.right), 0)
-            self.max_sum = max(self.max_sum, l_max_sum + r_max_sum + node.val)
-            return max(l_max_sum, r_max_sum, 0) + node.val
-        
-        depth_first_sum(root)
-        return self.max_sum
+            l_any_max, l_linear_max = max_path_sum(root.left)
+            r_any_max, r_linear_max = max_path_sum(root.right)
             
+            return (
+                max(l_any_max, r_any_max, max(l_linear_max, 0) + root.val + max(r_linear_max, 0)),
+                max(l_linear_max, r_linear_max, 0) + root.val
+            )
+        
+        return max_path_sum(root_)[0]
