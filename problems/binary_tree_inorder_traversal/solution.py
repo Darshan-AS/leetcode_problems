@@ -5,11 +5,16 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        def inorder(node: Optional[TreeNode]):
-            if not node: return
-            yield from inorder(node.left)
-            yield node.val
-            yield from inorder(node.right)
-        
-        return list(inorder(root))
+    def inorderTraversal(self, root_: Optional[TreeNode]) -> List[int]:
+        def inorder(root: Optional[TreeNode]):
+            stack = [root] if root else []
+            
+            while stack:
+                node = stack.pop()
+                if not node.left and not node.right: yield node.val; continue
+                
+                if node.right: stack.append(node.right)
+                stack.append(TreeNode(node.val))
+                if node.left: stack.append(node.left)
+                
+        return list(inorder(root_))
