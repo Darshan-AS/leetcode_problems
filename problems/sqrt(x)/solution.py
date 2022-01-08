@@ -7,12 +7,15 @@ class Solution:
         # return a
         
         low, high = 0, x
-        while True:
+        while low <= high:
             mid = (low + high) // 2
-            if mid ** 2 <= x < (mid + 1) ** 2:
-                return mid
+            y = mid * mid
             
-            if mid ** 2 > x:
+            if y > x:
                 high = mid - 1
-            else:
+            elif y < x:
                 low = mid + 1
+            else:
+                return mid
+        
+        return high
