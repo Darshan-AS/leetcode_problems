@@ -1,32 +1,23 @@
 class Solution:
-    def splitArray(self, nums: List[int], m: int) -> int:
-        prefix_sums = list(accumulate(nums, initial=0))
+    def splitArray(self, nums: List[int], m: int) -> int:        
+        def min_splits_with_sum(iterable, max_sum: int) -> int:
+            split_count = 1
+            curr_sum = 0
+            for x in iterable:
+                curr_sum += x
+                if curr_sum > max_sum:
+                    split_count += 1
+                    curr_sum = x
+            return split_count
         
-        @cache
-        def minimized_largest_sum(i: int, k: int) -> int:
-            if k == 1: return prefix_sums[-1] - prefix_sums[i]
+        low, high = max(nums), sum(nums)
+        while low <= high:
+            max_sum_allowed = (low + high) // 2
+            min_splits = min_splits_with_sum(nums, max_sum_allowed)
             
-            n = len(nums)
-            minimum_largest_split_sum = prefix_sums[-1]
-            for j in range(i, n - (k - 1)):
-                head_split_sum = prefix_sums[j + 1] - prefix_sums[i]
-                
-                if head_split_sum >= minimum_largest_split_sum: # Prune
-                    continue
-                
-                tail_minimum_largest_split_sum = minimized_largest_sum(j + 1, k - 1)
-                
-                minimum_largest_split_sum = min(
-                    minimum_largest_split_sum,
-                    max(head_split_sum, tail_minimum_largest_split_sum),
-                )
-            
-            return minimum_largest_split_sum
-                
-            # # Without pruning
-            # return min(
-            #     max(prefix_sums[j + 1] - prefix_sums[i], minimized_largest_sum(j + 1, k - 1))
-            #     for j in range(i, len(nums) - (k - 1))
-            # ) if k > 1 else (prefix_sums[-1] - prefix_sums[i])
+            if min_splits <= m:
+                high = max_sum_allowed - 1
+            elif min_splits > m:
+                low = max_sum_allowed + 1
         
-        return minimized_largest_sum(0, m)
+        return low
