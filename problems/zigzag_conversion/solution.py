@@ -1,20 +1,18 @@
 class Solution:
-    def convert(self, s: str, k: int) -> str:
-        if k == 1:
-            return s
+    def convert(self, s: str, num_rows: int) -> str:
+        # i, i + 2(r - 1 - i), i + 2(r - 1)
         
-        ans = []
-        n = len(s)
-        for i in range(k):
-            j = i
+        # 0 * (r - 1) + i, 2 * (r - 1) - i, 2 * (r - 1) + i, 4 * (r - 1) - i, 4 * (r - 1) + i, ....
+        def i_row_indices(i: int, r: int) -> Iterator[int]:
+            if r == 1: yield from count(i)
             
-            middle = True
-            while j < n:
-                ans.append(s[j])
-                if i == 0 or i == k - 1:
-                    j += 2 * (k - 1)
-                else:
-                    j += 2 * (k - i - 1) if middle else 2 * i
-                    middle = not middle
-                
-        return ''.join(ans)
+            yield i            
+            for x in count(2 * (r - 1), 2 * (r - 1)):
+                yield from (x - i, x + i) if 0 < i < r - 1 else (x + i,)
+        
+        return ''.join(chain.from_iterable(
+            (s[index] for index in takewhile(lambda x: x < len(s), i_row_indices(i, num_rows)))
+            for i in range(num_rows)
+        ))
+    
+    
