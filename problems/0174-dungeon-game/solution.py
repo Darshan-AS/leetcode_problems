@@ -1,18 +1,13 @@
 class Solution:
     def calculateMinimumHP(self, dungeon: List[List[int]]) -> int:
         m, n = len(dungeon), len(dungeon[0])
-
-        @cache
-        def min_hp(i: int, j: int) -> int:
-            if not (0 <= i < m and 0 <= j < n): return math.inf
-            x = dungeon[i][j]
-            
-            if (i, j) == (m - 1, n - 1):
-                return 1 if x > 0 else -(x - 1)
-            
-            hp = min(min_hp(i + 1, j), min_hp(i, j + 1))
-            return max(hp - x, 1)
-
         
-        return min_hp(0, 0)
+        dp = [math.inf] * (n + 1)
+        dp[n - 1] = 1
+        
+        for i, j in product(range(m - 1, -1, -1), range(n - 1, -1, -1)):
+            k = j
+            dp[k] = max(min(dp[k + 1], dp[k]) - dungeon[i][j], 1)
+        
+        return dp[0]
             
