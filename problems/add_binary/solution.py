@@ -1,24 +1,11 @@
 class Solution:
     def addBinary(self, a: str, b: str) -> str:
-        result = []
-        sum, carry = 0, 0
-        i, j = len(a) - 1, len(b) - 1
-        while i >= 0 or j >=0:
-            temp = carry
-            
-            if i >= 0:
-                temp += int(a[i])
-                i -= 1
-            
-            if j >= 0:
-                temp += int(b[j])
-                j -= 1
-                
-            sum = temp % 2
-            carry = temp // 2
-            result.append(str(sum))
+        sum_ = []
+        c = 0
         
-        if carry:
-            result.append('1')
-        
-        return ''.join(result[::-1]) if result else '0'
+        for x, y in zip_longest(map(int, reversed(a)), map(int, reversed(b)), fillvalue=0):
+            s, c = x ^ y ^ c, (x & y) | (y & c) | (c & x)
+            sum_.append(s)
+        if c: sum_.append(c)
+            
+        return ''.join(map(str, reversed(sum_)))
