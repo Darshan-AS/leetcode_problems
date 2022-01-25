@@ -1,9 +1,9 @@
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        if not strs: return ''
+        def common_prefix(s1: str, s2: str) -> str:
+            return ''.join(takewhile(
+                bool,
+                map(lambda x, y: x if x == y else '', s1, s2),
+            ))
         
-        for i, ch in enumerate(strs[0]):
-            for s in strs[1:]:
-                if i == len(s) or ch != s[i]:
-                    return s[:i]
-        return strs[0]
+        return reduce(common_prefix, strs)
