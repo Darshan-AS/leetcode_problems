@@ -1,20 +1,12 @@
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
+    def maxProfit(self, prices: List[int]) -> int:   
+        prefix_mins = accumulate(prices, min)
+        suffix_maxes = accumulate(reversed(prices), max)
         
-        n = len(prices)
+        prefix_profits = map(sub, prices, prefix_mins)
+        suffix_profits = map(sub, suffix_maxes, reversed(prices))
         
-        min_ = prices[0]
-        left = [0] * n
-        for i in range(1, n):
-            min_ = min(min_, prices[i])
-            left[i] = max(left[i - 1], prices[i] - min_)
+        max_prefix_profits = list(accumulate(prefix_profits, max))
+        max_suffix_profits = list(accumulate(suffix_profits, max))
         
-        max_ = prices[-1]
-        right = [0] * n
-        for i in range(n - 2, -1, -1):
-            max_ = max(max_, prices[i])
-            right[i] = max(right[i + 1], max_ - prices[i])
-        
-        return max(map(lambda x: x[0] + x[1], zip(left, right)))
+        return max(map(add, max_prefix_profits, reversed(max_suffix_profits)))
