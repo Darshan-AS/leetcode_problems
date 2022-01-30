@@ -13,19 +13,20 @@ class Solution:
             return i
         
         sentinal_head = i = j = ListNode(next=head_)
-        while j and j.next:
+        while j:
             count = 0
-            while j and j.next and count != k:
+            while j and count < k:
                 j = j.next
                 count += 1
-                        
-            if count == k:
-                j_next = j.next
-                j.next = None
-                j = i.next
-                i.next = reverse(i.next)
-                j.next = j_next
             
-            i = j
+            if not j or count < k: break
+
+            group, rest = i.next, j.next
+            i.next = j.next = None
+
+            r_group_head, r_group_tail = reverse(group), group
+            i.next, r_group_tail.next = r_group_head, rest
+
+            i = j = r_group_tail
         
         return sentinal_head.next
