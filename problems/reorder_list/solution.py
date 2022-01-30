@@ -3,40 +3,46 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+MaybeLL = ListNode | None
+
 class Solution:
-    def reorderList(self, head: ListNode) -> None:
-        """
-        Do not return anything, modify head in-place instead.
-        """
-        if not head:
-            return
+    def reorderList(self, head_: MaybeLL) -> None:
+        def split_in_half(head: MaybeLL) -> tuple[MaybeLL, MaybeLL]:
+            i = j = ListNode(next=head)
+            while j and j.next:
+                i, j = i.next, j.next.next
+                
+            f_half, s_half = head, i.next
+            i.next = None
+            return f_half, s_half
         
-        walker = runner = head
-        while runner and runner.next:
-            walker = walker.next
-            runner = runner.next.next
+        def reverse(head: MaybeLL) -> MaybeLL:
+            i, j = None, head
+            while j:
+                j.next, i, j = i, j, j.next
+            return i
         
-        prev, curr = None, walker
-        while curr:
-            temp = curr.next
-            curr.next = prev
-            prev = curr
-            curr = temp
+        def unthreadLL(head: MaybeLL) -> Iterator[ListNode]:
+            while head:
+                node, head = head, head.next
+                node.next = None
+                yield node
         
-        front, rear = head, prev
-        curr_end = ListNode()
-        while front and rear and front != rear:
-            next_front = front.next
-            next_rear = rear.next
-            
-            curr_end.next = front
-            front.next = rear
-            rear.next = None
-            curr_end = rear
-            
-            front = next_front
-            rear = next_rear
+        def threadLL(list_nodes: Iterator[ListNode]) -> MaybeLL:
+            sentinal_head = i = ListNode()
+            for node in list_nodes:
+                i.next = node
+                i = i.next
+            return sentinal_head.next
         
-        if front == rear:
-            curr_end.next = front
+        
+        first_half, second_half = split_in_half(head_)
+    
+        nodes = list(chain.from_iterable(zip_longest(
+            unthreadLL(first_half),
+            unthreadLL(reverse(second_half)),
+        )))
+                
+        return threadLL(nodes)
+        
         
