@@ -1,3 +1,8 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        return reduce(lambda a, x: max(a - 1, x) if a > 0 else -1, nums, 1) >= 0
+        i, j, n = 0, 0, len(nums)
+        
+        while i <= j < n - 1:
+            i, j = i + 1, max(j, i + nums[i])
+        
+        return j >= n - 1
