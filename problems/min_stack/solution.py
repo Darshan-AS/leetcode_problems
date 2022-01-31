@@ -1,9 +1,6 @@
 class MinStack:
 
     def __init__(self):
-        """
-        initialize your data structure here.
-        """
         self.stack = []
 
     def push(self, x: int) -> None:
