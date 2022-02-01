@@ -7,12 +7,14 @@
 
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
-        if not nums:
-            return
+        def sorted_seq_to_BST(seq: Sequence, start: int, end: int) -> TreeNode | None:
+            if start > end: return None
+            
+            mid = (start + end) // 2
+            return TreeNode(
+                seq[mid],
+                sorted_seq_to_BST(seq, start, mid - 1),
+                sorted_seq_to_BST(seq, mid + 1, end),
+            )
         
-        mid = len(nums) // 2
-        root = TreeNode(nums[mid])
-        root.left = self.sortedArrayToBST(nums[:mid])
-        root.right = self.sortedArrayToBST(nums[mid + 1:])
-        
-        return root
+        return sorted_seq_to_BST(nums, 0, len(nums) - 1)
