@@ -5,15 +5,16 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def kthSmallest(self, root: TreeNode, k: int) -> int:
-        stack = []
+    def kthSmallest(self, root_: TreeNode, k: int) -> int:
+        def inorder(root: TreeNode | None) -> Iterator:
+            stack = [root] if root else []
+
+            while stack:
+                node = stack.pop()
+                if not node.left and not node.right: yield node.val; continue
+                
+                if node.right: stack.append(node.right)
+                stack.append(TreeNode(node.val))
+                if node.left: stack.append(node.left)
         
-        node = None
-        while k:
-            while root:
-                stack.append(root)
-                root = root.left
-            node = stack.pop()
-            k -= 1
-            root = node.right
-        return node.val
+        return next(islice(inorder(root_), k - 1, None))
