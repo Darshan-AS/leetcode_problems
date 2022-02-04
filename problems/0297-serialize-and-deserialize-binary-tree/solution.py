@@ -6,30 +6,29 @@
 #         self.right = None
 
 class Codec:
+    DELIMITER = ','
 
-    def serialize(self, root):
-        """Encodes a tree to a single string.
-        
-        :type root: TreeNode
-        :rtype: str
-        """
-        return f'{str(root.val)},{self.serialize(root.left)},{self.serialize(root.right)}' if root else str(None)
+    def serialize(self, root: TreeNode | None) -> str:
+        return ''.join((
+            str(root.val),
+            self.DELIMITER,
+            self.serialize(root.left),
+            self.DELIMITER,
+            self.serialize(root.right),
+        )) if root is not None else str(root)
 
-    def deserialize(self, data):
-        """Decodes your encoded data to tree.
+    def deserialize(self, str_root: str) -> TreeNode | None:
+        def preorder_build(values: Iterator[Any]) -> TreeNode | None:
+            val = next(values)
+            if val is None: return val
+            
+            root = TreeNode(val)
+            root.left = preorder_build(values)
+            root.right = preorder_build(values)
+            return root
         
-        :type data: str
-        :rtype: TreeNode
-        """
-        def deserialize_helper(datas):
-            node = None if (x := datas.popleft()) is None else TreeNode(x)
-            if not node: return node
-            node.left = deserialize_helper(datas)
-            node.right = deserialize_helper(datas)
-            return node
-        
-        node_datas = deque(map(lambda s: int(s) if s != 'None' else None, data.split(',')))
-        return deserialize_helper(node_datas)
+        vals = map(eval, str_root.split(self.DELIMITER))
+        return preorder_build(vals)
 
 # Your Codec object will be instantiated and called as such:
 # ser = Codec()
