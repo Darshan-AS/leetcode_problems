@@ -1,34 +1,38 @@
 class Solution:
-    def kClosest(self, points: List[List[int]], k_: int) -> List[List[int]]:
-        def quick_select_first_k(seq: Sequence, k: int) -> Sequence:
+    def kClosest(self, points: list[list[int]], k_: int) -> list[list[int]]:
+        
+        def quick_select_first_k(
+            seq: Sequence[Any],
+            k: int,
+            key: Callable[[Any], Any] = None,
+            reverse: bool = False,
+        ) -> Sequence[Any]:
+            
+            key = key if key else lambda x: x
+            seq = list(seq)
+            
             def partition(low: int, high: int) -> int:
                 pivot_index, pivot = low, seq[low]
                 
                 while low <= high:
-                    if seq[low] > pivot:
+                    if (key(seq[low]) < key(pivot) if reverse else key(seq[low]) > key(pivot)):
                         seq[low], seq[high] = seq[high], seq[low]
                         high -= 1
                     else:
                         low += 1
                 
-                seq[high], seq[pivot_index] = seq[pivot_index], seq[high]
-                return low
+                seq[pivot_index], seq[high] = seq[high], seq[pivot_index]
+                return high
             
-            n = len(seq)
-            i, j = 0, n - 1
-            x = 0
-            while x != k:
-                x = partition(i, j)
-                if x < k: i = x
+            i, j = 0, len(seq) - 1
+            x, k = -1, k - 1
+            while (x := partition(i, j)) != k:
+                if x < k: i = x + 1
                 elif x > k: j = x - 1
             
-            return seq[:k]
-        
-        
-        
+            return seq[: k + 1]
         
         squared_dist = lambda p1, p2: (p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2
         squared_dist_from_origin = functools.partial(squared_dist, (0, 0))
         
-        dists = [(squared_dist_from_origin(p), p) for p in points]
-        return [p for _, p in quick_select_first_k(dists, k_)]
+        return quick_select_first_k(points, k_, key=squared_dist_from_origin)
