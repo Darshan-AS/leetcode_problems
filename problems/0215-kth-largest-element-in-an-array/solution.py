@@ -1,30 +1,35 @@
 class Solution:
     def findKthLargest(self, nums: list[int], k_: int) -> int:
         
-        # k in quick_select is 0 indexed
-        def quick_select(seq: Sequence[Any], k: int, reverse: bool = False) -> Any:
-            seq = seq.copy()
+        def quick_select(
+            seq: Sequence[Any],
+            k: int,
+            key: Callable[[Any], Any] = None,
+            reverse: bool = False,
+        ) -> Sequence[Any]:
+            
+            key = key if key else lambda x: x
+            seq = list(seq)
             
             def partition(low: int, high: int) -> int:
                 pivot_index, pivot = low, seq[low]
                 
                 while low <= high:
-                    if (seq[low] < pivot if reverse else seq[low] > pivot):
+                    if (key(seq[low]) < key(pivot) if reverse else key(seq[low]) > key(pivot)):
                         seq[low], seq[high] = seq[high], seq[low]
                         high -= 1
                     else:
                         low += 1
                 
-                seq[high], seq[pivot_index] = seq[pivot_index], seq[high]
+                seq[pivot_index], seq[high] = seq[high], seq[pivot_index]
                 return high
             
             i, j = 0, len(seq) - 1
-            x = -1
-            while x != k:
-                x = partition(i, j)
+            x, k = -1, k - 1
+            while (x := partition(i, j)) != k:
                 if x < k: i = x + 1
                 elif x > k: j = x - 1
             
-            return seq[x]
+            return seq[k]
         
-        return quick_select(nums, k_ - 1, reverse=True)
+        return quick_select(nums, k_, reverse=True)
