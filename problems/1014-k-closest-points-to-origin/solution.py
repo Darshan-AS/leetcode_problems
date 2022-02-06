@@ -33,6 +33,6 @@ class Solution:
             return seq[: k + 1]
         
         squared_dist = lambda p1, p2: (p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2
-        squared_dist_from_origin = functools.partial(squared_dist, (0, 0))
+        squared_dist_from_origin = cache(partial(squared_dist, (0, 0)))
         
-        return quick_select_first_k(points, k_, key=squared_dist_from_origin)
+        return quick_select_first_k(list(map(tuple, points)), k_, key=squared_dist_from_origin)
