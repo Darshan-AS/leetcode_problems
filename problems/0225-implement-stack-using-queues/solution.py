@@ -1,45 +1,28 @@
-class MyStack(object):
+class MyStack:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.queue = collections.deque()
+        self.queue = deque()
+
+    def push(self, x: int) -> None:
+        q = deque()
+        q.append(x)
+        q.append(self.queue)
+        self.queue = q
+
+    def pop(self) -> int:
+        assert not self.empty()
         
+        value = self.queue.popleft()
+        self.queue = self.queue.popleft()
+        return value
 
-    def push(self, x):
-        """
-        Push element x onto stack.
-        :type x: int
-        :rtype: None
-        """
-        n = len(self.queue)
-        self.queue.append(x)
-        for i in range(n):
-            self.queue.append(self.queue.popleft())
-
-    def pop(self):
-        """
-        Removes the element on top of the stack and returns that element.
-        :rtype: int
-        """
-        return self.queue.popleft()
+    def top(self) -> int:
+        assert not self.empty()
         
-
-    def top(self):
-        """
-        Get the top element.
-        :rtype: int
-        """
         return self.queue[0]
-        
 
-    def empty(self):
-        """
-        Returns whether the stack is empty.
-        :rtype: bool
-        """
-        return len(self.queue) == 0
+    def empty(self) -> bool:
+        return not self.queue
 
 
 # Your MyStack object will be instantiated and called as such:
