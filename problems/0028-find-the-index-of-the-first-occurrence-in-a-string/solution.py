@@ -1,28 +1,35 @@
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        # Boyer Moore
+        # Knuth – Morris – Pratt (KMP)
         NOT_FOUND = -1
 
-        def build_skip_table(pattern: str) -> dict:
-            return defaultdict(lambda: -1, {ch: i for i, ch in enumerate(pattern)})
+        def build_dfa(pattern: str):
+            m = len(pattern)
+            transitions = [defaultdict(int) for _ in range(m + 1)]
 
-        def search(pattern: str, skip_table: dict, text: str) -> int:
-            m, n = len(pattern), len(text)
-            i = 0
+            i, j = -1, 0
+            while j < m:
+                ch = pattern[j]
 
-            while i <= n - m:
-                j = m - 1
+                transitions[j] |= transitions[i]
+                transitions[j][ch] = j + 1
 
-                while j >= 0 and text[i + j] == pattern[j]:
-                    j -= 1
+                i = transitions[i][ch]
+                j = transitions[j][ch]
 
-                if j < 0:
-                    return i
+            transitions.pop()  # Remove dummy -1 index used for i, j = -1, 0 case
+            return transitions
 
-                i += max(1, j - skip_table[text[i + j]])
+        def search(pattern_dfa: dict, text: str) -> int:
+            state, end_state = 0, len(pattern_dfa)
+
+            for i, ch in enumerate(text):
+                state = pattern_dfa[state][ch]
+                if state == end_state:
+                    return i - end_state + 1
 
             return NOT_FOUND
 
-        st = build_skip_table(needle)
-        return search(needle, st, haystack) if st else 0
+        dfa = build_dfa(needle)
+        return search(dfa, haystack) if dfa else 0
 
