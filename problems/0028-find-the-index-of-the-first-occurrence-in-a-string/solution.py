@@ -1,26 +1,28 @@
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        # Rabin Karp
+        # Boyer Moore
         NOT_FOUND = -1
 
-        R, Q = 256, 1_000_000_007
-        RM = pow(R, len(needle) - 1, Q)
+        def build_skip_table(pattern: str) -> dict:
+            return defaultdict(lambda: -1, {ch: i for i, ch in enumerate(pattern)})
 
-        def build_hash(pattern: str) -> int:
-            return reduce(lambda a, x: (a * R + x) % Q, map(ord, pattern), 0)
+        def search(pattern: str, skip_table: dict, text: str) -> int:
+            m, n = len(pattern), len(text)
+            i = 0
 
-        def search(pattern_hash: int, pattern_len: int, text: str) -> int:
-            m, n = pattern_len, len(text)
-            h = 0
+            while i <= n - m:
+                j = m - 1
 
-            for i in range(n):
-                h = (h + Q - RM * ord(text[i - m]) % Q) % Q if i >= m else h
-                h = (h * R + ord(text[i])) % Q
-                if i >= m - 1 and h == pattern_hash:
-                    return i - m + 1
+                while j >= 0 and text[i + j] == pattern[j]:
+                    j -= 1
+
+                if j < 0:
+                    return i
+
+                i += max(1, j - skip_table[text[i + j]])
 
             return NOT_FOUND
 
-        hash_ = build_hash(needle)
-        return search(hash_, len(needle), haystack) if hash_ else 0
+        st = build_skip_table(needle)
+        return search(needle, st, haystack) if st else 0
 
