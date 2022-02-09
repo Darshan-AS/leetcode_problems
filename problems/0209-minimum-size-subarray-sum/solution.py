@@ -6,7 +6,7 @@ class Solution:
         curr_sum = 0
         while j < n:
             curr_sum += nums[j]
-            while i <= j and curr_sum >= target:
+            while curr_sum >= target:
                 length = min(length, j - i + 1)
                 curr_sum -= nums[i]
                 i += 1
