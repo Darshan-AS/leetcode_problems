@@ -6,11 +6,15 @@ class Solution:
             graph[u].add(v)
             graph[v].add(u)
         
-        while (level := [u for u, vs in graph.items() if len(vs) == 1]) and len(graph) > 2:
-            for u in level:
-                for v in graph[u]:
-                    graph[v].remove(u)
+        leaves = [u for u, vs in graph.items() if len(vs) == 1]
+        while len(graph) > 2:
+            new_leaves = []
+            for u in leaves:
+                v = graph[u].pop() # only 1 connection in any leaf
+                graph[v].remove(u)
+                if len(graph[v]) == 1: new_leaves.append(v)
                 del graph[u]
+            leaves = new_leaves
         
         return graph.keys()
             
