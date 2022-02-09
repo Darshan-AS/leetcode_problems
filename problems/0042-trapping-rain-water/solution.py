@@ -3,15 +3,11 @@ class Solution:
         water_units = 0
         
         i, j = 0, len(height) - 1
-        left_max = right_max = 0
+        max_h = 0
         while i < j:
-            if height[i] < height[j]:
-                left_max = max(left_max, height[i])
-                water_units += left_max - height[i]
-                i += 1
-            else:
-                right_max = max(right_max, height[j])
-                water_units += right_max - height[j]
-                j -= 1
+            h = min(height[i], height[j])
+            max_h = max(max_h, h)
+            water_units += max_h - h
+            i, j = (i + 1, j) if h == height[i] else (i, j - 1)
         
         return water_units
