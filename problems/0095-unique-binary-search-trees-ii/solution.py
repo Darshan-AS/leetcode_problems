@@ -4,17 +4,15 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-from itertools import product
 
 class Solution:
-    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
-        def gen_trees(left: int, right: int) -> List[Optional[TreeNode]]:
-            if left == right:
-                yield None
-                return
-            
-            for i in range(left, right):
-                for l, r in product(list(gen_trees(left, i)), list(gen_trees(i + 1, right))):
-                    yield TreeNode(i, l, r)
+    def generateTrees(self, n: int) -> list[TreeNode | None]:
+        def gen_trees(start: int, end: int) -> Iterator[TreeNode | None]:
+            return (
+                TreeNode(value, deepcopy(left), deepcopy(right))
+                for value in range(start, end)
+                for left in gen_trees(start, value)
+                for right in gen_trees(value + 1, end)
+            ) if start < end else (None,)
         
         return list(gen_trees(1, n + 1))
