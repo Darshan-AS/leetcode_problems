@@ -3,23 +3,26 @@ class Solution:
         Graph = dict[Any, list[Any, float]]
         Edge = tuple[Any, Any, float]
         
-        # Kruskal's algorithm
+        # Prim's algorithm
         def minimum_spanning_tree(graph: Graph) -> Iterator[Edge]:
             if not graph:
                 return
 
-            dsu = DSU()
-            pq = [(d, u, v) for u, vs in graph.items() for v, d in vs]
+            u = next(iter(graph))
+            seen = {u}
+            pq = [(d, u, v) for v, d in graph[u]]
             heapify(pq)
 
-            vertex_count = len(graph)
-            while pq and vertex_count > 0:
+            while pq and len(seen) < len(graph):
                 d, u, v = heappop(pq)
-                if dsu.safe_is_connected(u, v):
+                if v in seen:
                     continue
 
-                dsu.safe_union(u, v)
-                vertex_count -= 1
+                for v_, d_ in graph[v]:
+                    if v_ not in seen:
+                        heappush(pq, (d_, v, v_))
+
+                seen.add(v)
                 yield (u, v, d)
         
         
@@ -31,51 +34,7 @@ class Solution:
         graph_ = defaultdict(list)
         for u, v, d in connections:
             graph_[u].append((v, d))
+            graph_[v].append((u, d))
         
         return sum(d for _, _, d in minimum_spanning_tree(graph_))
-
-
-class DSU:
-    def __init__(self, xs: iter = None) -> None:
-        self.parents = {x: x for x in xs} if xs else {}
-        self.sizes = {x: 1 for x in xs} if xs else {}
-
-    def add(self, x: Any) -> None:
-        if x in self.parents:
-            return
-        self.parents[x] = x
-        self.sizes[x] = 1
-
-    def find(self, x: Any) -> Any:
-        if self.parents[x] != x:
-            self.parents[x] = self.find(self.parents[x])
-        return self.parents[x]
-
-    def union(self, u: Any, v: Any) -> None:
-        ur = self.find(u)
-        vr = self.find(v)
-
-        low, high = (ur, vr) if self.sizes[ur] < self.sizes[vr] else (vr, ur)
-        self.parents[low] = high
-        self.sizes[high] += self.sizes[low]
-
-    def is_connected(self, u: Any, v: Any) -> bool:
-        ur = self.find(u)
-        vr = self.find(v)
-        return ur == vr
-
-    def safe_find(self, x: Any) -> Any:
-        self.add(x)
-        return self.find(x)
-
-    def safe_union(self, u: Any, v: Any) -> None:
-        self.add(u)
-        self.add(v)
-        self.union(u, v)
-
-    def safe_is_connected(self, u: Any, v: Any) -> bool:
-        self.add(u)
-        self.add(v)
-        return self.is_connected(u, v)
-
 
