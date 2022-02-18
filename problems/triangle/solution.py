@@ -1,9 +1,13 @@
 class Solution:
-    def minimumTotal(self, triangle: List[List[int]]) -> int:
-        # Top down iterative DP
+    def minimumTotal(self, triangle: list[list[int]]) -> int:     
+        n = len(triangle)
         
-        dp = (0, 0)
-        for i in range(len(triangle)):
-            dp = (math.inf, *(min(dp[j], dp[j + 1]) + triangle[i][j] for j in range(i + 1)), math.inf)
+        dp = [math.inf] * (n + 1)
+        dp[1] = 0
+        for i in range(n):
+            prev = dp[0]
+            for j in range(i + 1):
+                k = j + 1
+                prev, dp[k] = dp[k], min(prev, dp[k]) + triangle[i][j]
         
         return min(dp)
