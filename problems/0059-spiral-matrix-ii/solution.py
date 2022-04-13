@@ -1,7 +1,7 @@
 class Solution:
-    def generateMatrix(self, n: int) -> List[List[int]]:
+    def generateMatrix(self, n: int) -> list[list[int]]:
         
-        def inwards_spiral(m: int, n: int) -> Iterator[Tuple[int, int]]:
+        def inwards_spiral(m: int, n: int) -> Iterator[tuple[int, int]]:
             
             for k in range((min(m, n) + 1) // 2):
                 (i1, j1), (i2, j2) = (k, k), (m - k - 1, n - k - 1)
