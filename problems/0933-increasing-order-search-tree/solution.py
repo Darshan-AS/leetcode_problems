@@ -7,25 +7,16 @@
 
 class Solution:
     def increasingBST(self, bst: TreeNode) -> TreeNode:
-        def inorder_nodes(root: TreeNode | None) -> Iterable[TreeNode]:
-            if not root: return
+        def to_inorder_LL(root: TreeNode | None) -> tuple[TreeNode | None, TreeNode | None]:
+            if root is None: return None, None
             
-            l_node, r_node = root.left, root.right
-            root.left = root.right = None
+            l_head, l_tail = to_inorder_LL(root.left)
+            r_head, r_tail = to_inorder_LL(root.right)
             
-            yield from inorder_nodes(l_node)
-            yield root
-            yield from inorder_nodes(r_node)
+            if l_tail: l_tail.right = root
+            root.left, root.right = None, r_head
+            
+            return l_head or root, r_tail or root
         
-        def peek(iterable: Iterable[Any]) -> tuple[Any, Iterable[Any]]:
-            head = next(iterable, None)
-            return head, chain((head,), iterable)
-        
-        def thread_nodes(nodes: Iterable[TreeNode]) -> TreeNode | None:
-            head, nodes = peek(nodes)
-            for a, b in pairwise(nodes): a.right = b
-            return head
-        
-        return thread_nodes(inorder_nodes(bst))
-        
+        return to_inorder_LL(bst)[0]
         
