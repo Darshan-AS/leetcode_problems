@@ -5,8 +5,12 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def averageOfLevels(self, root: TreeNode) -> List[float]:
-        level = (root,)
-        while level:
-            yield sum(node.val for node in level) / len(level)
-            level = tuple(child for node in level for child in (node.left, node.right) if child)
+    def averageOfLevels(self, root_: TreeNode | None) -> list[float]:
+        def level_order(root: TreeNode | None):
+            level = (root,) if root else tuple()
+            while level:
+                yield tuple(node.val for node in level)
+                level = tuple(child for node in level for child in (node.left, node.right) if child)
+        
+        average = lambda xs: sum(xs) / len(xs)
+        return list(map(average, level_order(root_)))
