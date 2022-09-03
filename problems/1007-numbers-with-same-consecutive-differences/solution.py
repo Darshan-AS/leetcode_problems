@@ -1,16 +1,18 @@
 class Solution:
-    def numsSameConsecDiff(self, N: int, K: int) -> List[int]:
-        def helper(num, n):
-            if not n:
-                yield num
-                return
+    def numsSameConsecDiff(self, n_: int, k_: int) -> list[int]:
+        def num_consec_diff(prefix: int, n: int, k: int):
+            if n == 1: yield prefix; return
             
-            last_digit = num % 10
-            next_digits = set((last_digit + K, last_digit - K))
+            last_digit = prefix % 10
+            next_digit_candidates = {last_digit - k, last_digit + k}
             
-            for j in next_digits:
-                if 0 <= j <= 9:
-                    yield from helper(num * 10 + j, n - 1)
+            yield from chain.from_iterable(
+                num_consec_diff(prefix * 10 + d, n - 1, k)
+                for d in next_digit_candidates
+                if 0 <= d <= 9
+            )
         
-        begin = 0 if N == 1 else 1
-        return list(chain(*(helper(i, N - 1) for i in range(begin, 10))))
+        return list(chain.from_iterable(
+            num_consec_diff(i, n_, k_)
+            for i in range(1, 10)
+        ))
