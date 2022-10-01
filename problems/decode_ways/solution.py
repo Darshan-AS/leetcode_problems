@@ -1,10 +1,6 @@
 class Solution:
-    def numDecodings(self, s: str) -> int:        
-        a, b = 0, 1
-        for x in range(len(s)):            
-            a, b = b, (
-                (b if int(s[x]) else 0) +
-                (a if x > 0 and 10 <= int(s[x - 1: x + 1]) <= 26 else 0)
-            )
-        
+    def numDecodings(self, s: str) -> int:
+        a, b, p_ch = 0, 1, ''
+        for ch in s:
+            a, b, p_ch = b, b * (int(ch) > 0) + a * (10 <= int(p_ch + ch) <= 26), ch
         return b
