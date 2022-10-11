@@ -1,13 +1,13 @@
+from numbers import Number
+
 class Solution:
-    def increasingTriplet(self, nums: List[int]) -> bool:
-        min1 = min2 = math.inf
+    def increasingTriplet(self, nums: list[int]) -> bool:
+        def increasing_k(seq: list[Number], k: int) -> bool:
+            mins = [math.inf] * (k - 1)
+            for v in seq:
+                i = bisect.bisect_left(mins, v)
+                if i == k - 1: return True
+                mins[i] = v
+            return False
         
-        for num in nums:
-            if num <= min1:
-                min1 = num
-            elif num <= min2:
-                min2 = num
-            else:
-                return True
-        
-        return False
+        return increasing_k(nums, 3)
