@@ -1,13 +1,14 @@
 class Solution:
-    def minDifficulty(self, jobs: List[int], d: int) -> int:
-        n = len(jobs)        
-        dp = [[-1] * (n + 1) for _ in range(d + 1)]
+    def minDifficulty(self, diffs: list[int], d_: int) -> int:
+        @cache
+        def min_diff(i: int, d: int):
+            if d == 1: return max(diffs[i:])
+            
+            return min((
+                max(diffs[i:k]) + min_diff(k, d - 1)
+                for k in range(i + 1, len(diffs))),
+                default=inf,
+            )
         
-        for i in range(1, n + 1):
-            dp[1][i] = max(dp[1][i - 1], jobs[i - 1])
-        
-        for i in range(2, d + 1):
-            for j in range(i, n + 1):
-                dp[i][j] = min(dp[i - 1][k] + max(jobs[k:j]) for k in range(i - 1, j))
-        
-        return dp[d][n]
+        m_diff = min_diff(0, d_)
+        return -1 if m_diff == inf else m_diff
