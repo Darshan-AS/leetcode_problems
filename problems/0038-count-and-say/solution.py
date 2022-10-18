@@ -1,17 +1,8 @@
-class Solution:        
+class Solution:
     def countAndSay(self, n: int) -> str:
-        seq = '1'
-        for _ in range(1, n):
-            count = 0
-            current_ch = seq[0]
-            next_seq_list = []
-            for ch in seq:
-                if ch == current_ch:
-                    count += 1
-                else:
-                    next_seq_list.extend([str(count), current_ch])
-                    current_ch = ch
-                    count = 1
-            next_seq_list.extend([str(count), current_ch])
-            seq = ''.join(next_seq_list)
-        return seq
+        len_ = lambda iterable: sum(1 for _ in iterable)
+        
+        def say(s: str) -> str:
+            return ''.join(str(len_(g)) + i for i, g in groupby(s))
+        
+        return reduce(lambda a, _: say(a), range(1, n), '1')
