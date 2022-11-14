@@ -1,10 +1,5 @@
 class Solution:
-    def removeStones(self, stones: List[List[int]]) -> int:
-        def pairwise(iterable):
-            a, b = tee(iterable)
-            next(b, None)
-            return zip(a, b)
-        
+    def removeStones(self, stones: list[list[int]]) -> int:        
         dsu = DSU()
         row_map, col_map = defaultdict(list), defaultdict(list)
         
