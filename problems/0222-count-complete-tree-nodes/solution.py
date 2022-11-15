@@ -5,29 +5,21 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def countNodes(self, root_: Optional[TreeNode]) -> int:
-        def left_most_height(root: Optional[TreeNode]) -> int:
+    def countNodes(self, root_: TreeNode | None) -> int:
+        def height(c_root: TreeNode | None, left: bool=True) -> int:
             h = 0
-            node = root
-            while node:
-                node = node.left
+            while c_root:
                 h += 1
+                c_root = c_root.left if left else c_root.right
             return h
         
-        # return n**0 + n**1 + n**2 + ... + n**k
-        def powers_sum(n: int, k: int) -> int:
-            return n ** k - 1
         
-        def count_nodes(root: Optional[TreeNode], l_height: int = None, r_height: int = None) -> int:
-            if not root: return 0
+        root = root_
+        count = 0
+        while root and (lh := height(root.left, left=True)) != (rh := height(root.right, left=False)):
+            midh = height(root.left, left=False)
             
-            l_height = left_most_height(root.left) if l_height is None else l_height
-            r_height = left_most_height(root.right) if r_height is None else r_height
-            
-            return (
-                powers_sum(2, l_height) + 1 + count_nodes(root.right, r_height - 1)
-                if l_height == r_height
-                else count_nodes(root.left, l_height - 1) + 1 + powers_sum(2, r_height)
-            )
-        
-        return count_nodes(root_)
+            root, h = (root.right, lh) if midh == lh else (root.left, rh)
+            count += 2 ** h
+
+        return count + (0 if root is None else 2 ** (lh + 1) - 1)
