@@ -1,12 +1,17 @@
-from itertools import chain
+from collections.abc import *
 
 class Solution:
-    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
-        def find_path(start: int, end: int):
-            yield from (
-                chain((start,), path)
-                for i in graph[start]
-                for path in find_path(i, end)
-            ) if start != end else ((end,),)
-            
-        return list(map(list, find_path(0, len(graph) - 1)))
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        T = TypeVar('T')
+        Graph = Mapping[T, Collection[T]]
+        Path = Iterable[T]
+
+        def dag_paths(dag: Graph, source: T, destination: T) -> Iterator[Path]:
+            all_nbr_paths = chain.from_iterable(
+                dag_paths(dag, nbr, destination)
+                for nbr in dag[source]
+            ) if source != destination else (deque(),)
+
+            return map(lambda p: p.appendleft(source) or p, all_nbr_paths)
+        
+        return list(dag_paths(graph, 0, len(graph) - 1))
