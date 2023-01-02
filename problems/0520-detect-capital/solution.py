@@ -1,3 +1,3 @@
 class Solution:
     def detectCapitalUse(self, word: str) -> bool:
-        return re.fullmatch(r"[A-Z]*|.[a-z]*", word)
+        return all(map(str.isupper, word)) or all(map(str.islower, islice(word, 1, None)))
