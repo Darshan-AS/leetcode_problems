@@ -4,25 +4,28 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
 class Solution:
-    def preorderTraversal(self, root_: Optional[TreeNode]) -> List[int]:
+    def preorderTraversal(self, root_: TreeNode | None) -> list[int]:
         # Morris (Destroys and recovers the tree)
-        def preorder(root: Optional[TreeNode]):
+        def preorder(root: TreeNode | None) -> Iterable:
             node = root
             while node:
-                yield node.val
-                if node.left:
-                    last = node.left
-                    while last.right and last.right != node.right:
-                        last = last.right
-                    
-                    if last.right:
-                        last.right = None
-                        node = node.right
-                    else:
-                        last.right = node.right
-                        node = node.left
+                if node.left is None:
+                    yield node.val
+                    node = node.right
+                    continue
+
+                last = node.left
+                while last.right and last.right != node:
+                    last = last.right
+                
+                if last.right is None:
+                    yield node.val
+                    last.right = node
+                    node = node.left
                 else:
+                    last.right = None
                     node = node.right
                 
         return list(preorder(root_))
