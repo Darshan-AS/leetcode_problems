@@ -1,28 +1,25 @@
-from collections.abc import *
-
 class Solution:
-    def countSubTrees(self, n: int, edges: list[list[int]], labels_: str) -> list[int]:
-        T = TypeVar('T')
-        Tree = Mapping[T, Collection[T]]
-        Label = str
+    def countSubTrees(self, n: int, edges: list[list[int]], labels: str) -> list[int]:
 
-        def count_sub_trees(tree: Tree, labels: Sequence[Label], root_: T, parent_: T) -> Sequence[int]:
+        def count_sub_trees(n: int, tree: dict[int, list[int]], labels: str) -> list[int]:
             ans = list(range(n))
+            counter = Counter()
 
-            def count_labels(root: T, parent: T) -> Counter[Label]:
-                c = reduce(
-                    lambda a, x: a.update(x) or a,
-                    (count_labels(child, root) for child in tree[root] if child != parent),
-                    Counter(labels[root]),
-                )
-                ans[root] = c[labels[root]]
-                return c
+            def count_labels(root: int, parent: int) -> None:
+                before = counter[labels[root]]
 
-            count_labels(root_, parent_)
+                for child in tree[root]:
+                    if child != parent: count_labels(child, root) 
+                counter[labels[root]] += 1
+
+                after = counter[labels[root]]
+                ans[root] = after - before
+
+            count_labels(0, -1)
             return ans
 
         t = defaultdict(list)
         for u, v in edges: t[u].append(v); t[v].append(u)
 
-        return count_sub_trees(t, labels_, 0, -1)
+        return count_sub_trees(n, t, labels)
 
