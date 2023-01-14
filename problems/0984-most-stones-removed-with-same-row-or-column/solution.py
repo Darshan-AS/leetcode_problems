@@ -9,49 +9,44 @@ class Solution:
         
         for ss in chain(row_map.values(), col_map.values()):
             for s1, s2 in pairwise(ss):
-                dsu.safe_union(s1, s2)
+                dsu.union(s1, s2)
         
-        rem_stones = len(set(map(lambda s: dsu.safe_find_root(tuple(s)), stones)))
+        rem_stones = len(set(dsu.find(tuple(s)) for s in stones))
         return len(stones) - rem_stones
-    
+
+
 class DSU:
-    def __init__(self, xs: iter = None) -> None:
-        self.parents = {x: x for x in xs} if xs else {}
-        self.sizes = {x: 1 for x in xs} if xs else {}
+    T = Hashable
+
+    def __init__(self, xs: Iterable[T] = tuple()) -> None:
+        self.parents = {x: x for x in xs}
+        self.sizes = {x: 1 for x in xs}
     
-    def add(self, x: Any) -> None:
+    def add(self, x: T) -> None:
         if x in self.parents: return
         self.parents[x] = x
         self.sizes[x] = 1
     
-    def find_root(self, x: Any) -> Any:
-        if self.parents[x] != x:
-            self.parents[x] = self.find_root(self.parents[x])
+    def make_safe(func: Callable) -> Callable:
+        """Decorator used to ensure input values are added to parents using in func"""
+        def wrapper(self, *xs):
+            for x in xs: self.add(x)
+            return func(self, *xs)
+        return wrapper
+    
+    @make_safe
+    def union(self, u: T, v: T) -> None:
+        ur, vr = self.find(u), self.find(v)
+        short_t, long_t = (ur, vr) if self.sizes[ur] < self.sizes[vr] else (vr, ur)
+
+        self.parents[short_t] = long_t
+        self.sizes[long_t] += self.sizes[short_t]
+    
+    @make_safe
+    def find(self, x: T) -> T:
+        self.parents[x] = self.find(self.parents[x]) if self.parents[x] != x else x
         return self.parents[x]
-        
-    def union(self, u: Any, v: Any) -> None:
-        ur = self.find_root(u)
-        vr = self.find_root(v)
-        
-        low, high = (ur, vr) if self.sizes[ur] < self.sizes[vr] else (vr, ur)
-        self.parents[low] = high
-        self.sizes[high] += self.sizes[low]
     
-    def find(self, u: Any, v: Any) -> bool:
-        ur = self.find_root(u)
-        vr = self.find_root(v)
-        return ur == vr
-    
-    def safe_find_root(self, x: Any) -> Any:
-        self.add(x)
-        return self.find_root(x)
-    
-    def safe_union(self, u: Any, v: Any) -> None:
-        self.add(u)
-        self.add(v)
-        self.union(u, v)
-    
-    def safe_find(self, u: Any, v: Any) -> bool:
-        self.add(u)
-        self.add(v)
-        return self.find(u, v)
+    @make_safe
+    def is_connected(self, u: T, v: T) -> bool:
+        return self.find(u) == self.find(v)
