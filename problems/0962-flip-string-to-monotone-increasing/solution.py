@@ -1,11 +1,9 @@
 class Solution:
     def minFlipsMonoIncr(self, s: str) -> int:
-        # Iterative version of the previous submission (recursive solution)        
-        count_0 = 0
-        flips = 0
-        for ch in reversed(s):
-            if ch == '0':
-                count_0 += 1
-            else:
-                flips = min(count_0, 1 + flips)
-        return flips
+        return reduce(lambda a, x: (
+                (a[0], a[1] + 1)
+                if x == '1'
+                else (min(a[0] + 1, a[1]), a[1])
+            ), s, (0, 0), # (min_flips, prefix_1s)
+        )[0]
+
