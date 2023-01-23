@@ -1,13 +1,9 @@
 class Solution:
     def findJudge(self, n: int, trust: list[list[int]]) -> int:
-        degrees = [[0, 0] for _ in range(n + 2)]    # [indegree, outdegree] of every node
-        degrees[0] = [-1, -1]                       # Impossible judge
-        degrees[-1] = [n - 1, 0]                    # Default judge
+        degrees = list(chain((-1,), repeat(0, n), (n - 1,)))
         
-        for a, b in trust:
-            degrees[a][1] += 1
-            degrees[b][0] += 1
+        for u, v in trust: degrees[u] -= 1; degrees[v] += 1
         
-        judge = degrees.index([n - 1, 0])
+        judge = degrees.index(n - 1)
         return judge if judge <= n else -1
 
