@@ -1,41 +1,30 @@
+from sortedcontainers import SortedList
+
 class SummaryRanges:
 
     def __init__(self):
-        self.nodes = {}
+        self.intervals = SortedList()
 
-    def addNum(self, v: int) -> None:
-        if v in self.nodes: return
+    def addNum(self, value: int) -> None:
+        n = len(self.intervals)
+        i = bisect.bisect(self.intervals, (value, math.inf))
+        lt = self.intervals[i - 1] if 0 <= i - 1 < n else (-inf, -inf)
+        rt = self.intervals[i    ] if 0 <= i     < n else ( inf,  inf)
         
-        self.nodes[v] = v
-        self.union(v - 1, v)
-        self.union(v, v + 1)
+        if lt[0] <= value <= lt[1]: return
 
-    def getIntervals(self) -> List[List[int]]:
-        intervals = {}
-        
-        for u in self.nodes:
-            v = self.root(u)
-            intervals[v] = min(intervals[v], u) if v in intervals else u
-        
-        return sorted([[u, v] for v, u in intervals.items()])
-    
-    def union(self, u: int, v: int) -> None:
-        if u not in self.nodes or v not in self.nodes: return
-        
-        ur = self.root(u)
-        vr = self.root(v)
-        
-        self.nodes[ur] = vr
-    
-    def root(self, u: int) -> int:
-        while self.nodes[u] != u:
-            p = self.nodes[u]
-            self.nodes[u] = self.nodes[p] # Path compression
-            u = p
-        return u
+        a, b = value, value
+        if lt[1] + 1 == value: self.intervals.remove(lt); a  = lt[0]
+        if value == rt[0] - 1: self.intervals.remove(rt); b = rt[1]
+
+        self.intervals.add((a, b))
+
+    def getIntervals(self) -> list[list[int]]:
+        return self.intervals
 
 
 # Your SummaryRanges object will be instantiated and called as such:
 # obj = SummaryRanges()
-# obj.addNum(val)
+# obj.addNum(value)
 # param_2 = obj.getIntervals()
+
