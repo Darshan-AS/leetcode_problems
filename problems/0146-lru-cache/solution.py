@@ -31,10 +31,12 @@ class LRUCache:
         return d.value
 
     def put(self, key: int, value: int) -> None:
+        if self.capacity == 0: return
+
         if key in self.cache:
-            d = self.cache[key]
-            self.dll.remove(d.node)
-            self.cache.pop(d.key)
+            self.cache[key].value = value
+            self.get(key)
+            return
 
         if len(self.cache) == self.capacity:
             lru_key = self.dll.popleft().value
