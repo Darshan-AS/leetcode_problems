@@ -1,15 +1,19 @@
-from itertools import islice
-from collections import deque
+from collections.abc import *
+from numbers import Number
 
 class Solution:
     def tribonacci(self, n: int) -> int:
-        def trib():
-            trib_queue = deque([0, 1, 1], maxlen=3)
-            sum_ = sum(trib_queue)
+        T = Number
+        def kibonaccis(inits: Iterable[T], k: int) -> Iterable[T]:
+            assert k >= 1, "k should be atleast 1"
+            dq = deque(islice(inits, k), k)
+            assert len(dq) == k, "Length of inits should be >= k"
+
+            rt = sum(dq)
             while True:
-                k = trib_queue.popleft()
-                yield k
-                trib_queue.append(sum_)
-                sum_ = sum_ + sum_ - k
-                
-        return next(islice(trib(), n, None))
+                lt = dq.popleft()
+                dq.append(rt)
+                rt += rt - lt
+                yield lt
+        
+        return next(islice(kibonaccis((0, 1, 1), 3), n, None))
