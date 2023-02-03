@@ -14,5 +14,3 @@ class Solution:
             (s[index] for index in takewhile(lambda x: x < len(s), i_row_indices(i, num_rows)))
             for i in range(num_rows)
         ))
-    
-    
