@@ -1,37 +1,22 @@
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        charset = string.ascii_lowercase
-        charset_count = len(charset)
         n1, n2 = len(s1), len(s2)
+        c1, c2 = Counter(s1), Counter(s2[:n1])
         
-        s1_counter = {ch: 0 for ch in charset}
-        for ch in s1:
-            s1_counter[ch] += 1
-        
-        s2_window_counter = {ch: 0 for ch in charset}
-        for ch in s2[:n1]:
-            s2_window_counter[ch] += 1
-            
-        same_ch_counts = sum(s1_counter[ch] == s2_window_counter[ch] for ch in charset)
-        for j in range(n1, n2):
-            i = j - n1
-            first, last = s2[i], s2[j]
-            if same_ch_counts == charset_count:
-                return True
-            
-            s2_window_counter[last] += 1
-            if s2_window_counter[last] == s1_counter[last]:
-                same_ch_counts += 1
-            elif s2_window_counter[last] - 1 == s1_counter[last]:
-                same_ch_counts -= 1
-            
-            s2_window_counter[first] -= 1
-            if s2_window_counter[first] == s1_counter[first]:
-                same_ch_counts += 1
-            elif s2_window_counter[first] + 1 == s1_counter[first]:
-                same_ch_counts -= 1
-            
+        eq_count = sum(c1[ch] == c2[ch] for ch in c1)
 
-                    
-        return same_ch_counts == charset_count
-        
+        for i in range(n1, n2):
+            if eq_count == len(c1): return True
+
+            fst, lst = s2[i - n1], s2[i]
+
+            if c1[lst] and c2[lst] == c1[lst]: eq_count -= 1
+            c2[lst] += 1
+            if c1[lst] and c2[lst] == c1[lst]: eq_count += 1
+
+            if c1[fst] and c2[fst] == c1[fst]: eq_count -= 1
+            c2[fst] -= 1
+            if c1[fst] and c2[fst] == c1[fst]: eq_count += 1
+
+        return eq_count == len(c1)
+
