@@ -1,23 +1,22 @@
-from collections import Counter
-
 class Solution:
-    def findAnagrams(self, s: str, p: str) -> List[int]:
-        s_len, p_len = len(s), len(p)
-        if s_len < p_len: return []
+    def findAnagrams(self, s2: str, s1: str) -> list[int]:
+        n1, n2 = len(s1), len(s2)
+        c1, c2 = Counter(s1), Counter(islice(s2, n1))
         
-        s_counter, p_counter = Counter(s[:p_len]), Counter(p)
-        indices = [0] if s_counter == p_counter else []
-        
-        for i in range(p_len, s_len):
-            s_counter[s[i]] += 1
-            x = s[i - p_len]
-            # Not needed on python 3.10 and above as counter values with 0 will be ignored while comparing
-            if s_counter[x] == 1:
-                del s_counter[x]
-            else:
-                s_counter[x] -= 1
-            
-            if s_counter == p_counter:
-                indices.append(i - p_len + 1)
-        
-        return indices
+        eq_count = sum(c1[ch] == c2[ch] for ch in c1)
+
+        starts = [0] if eq_count == len(c1) else []
+        for i in range(n1, n2):
+            fst, lst = s2[i - n1], s2[i]
+
+            if c1[lst] and c2[lst] == c1[lst]: eq_count -= 1
+            c2[lst] += 1
+            if c1[lst] and c2[lst] == c1[lst]: eq_count += 1
+
+            if c1[fst] and c2[fst] == c1[fst]: eq_count -= 1
+            c2[fst] -= 1
+            if c1[fst] and c2[fst] == c1[fst]: eq_count += 1
+
+            if eq_count == len(c1): starts.append(i - n1 + 1)
+
+        return starts
