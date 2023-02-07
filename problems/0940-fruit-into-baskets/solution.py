@@ -1,19 +1,14 @@
 class Solution:
-    def totalFruit(self, fruits: List[int]) -> int:
-        def k_groupby(iterable: iter, k: int = 1):
-            it = iter(iterable)
-            queue = deque()
-            counter = {}
-            while (x := next(it, None)) is not None:
-                if x not in counter and len(counter) == k:
-                    yield queue
-                    while len(counter) == k:
-                        t = queue.popleft()
-                        counter[t] -= 1
-                        if not counter[t]: counter.pop(t)
-                queue.append(x)
-                counter[x] = counter.get(x, 0) + 1
-            yield queue
-        
-        return max(sum(1 for _ in g) for g in k_groupby(fruits, 2))
+    def totalFruit(self, fruits: list[int]) -> int:
+        baskets = (-1, -1)
+        max_picked = picked = 0
+        i = 0
+        for j in range(len(fruits)):
+            if fruits[j] not in baskets:
+                max_picked = max(max_picked, picked)
+                baskets = (fruits[i], fruits[j])
+                picked = j - i
+            picked += 1
+            i = j if fruits[i] != fruits[j] else i
 
+        return max(max_picked, picked)
