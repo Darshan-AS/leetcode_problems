@@ -1,7 +1,11 @@
 class Solution:
     def minMaxDifference(self, num: int) -> int:
-        def replace_num(n: int, a: int, b: int) -> int:
-            return int(''.join(str(b) if int(x) == a else x for x in str(n)))
-        
-        xs = tuple(replace_num(num, i, j) for i, j in product(range(10), range(10)))
-        return max(xs) - min(xs)
+        s_num = str(num)
+
+        ch = s_num[0]
+        min_num = int(s_num.replace(ch, '0'))
+
+        ch = next((x for x in s_num if x != '9'), '0')
+        max_num = int(s_num.replace(ch, '9'))
+
+        return max_num - min_num
