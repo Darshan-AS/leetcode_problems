@@ -6,7 +6,7 @@
 #         self.right = right
 class Solution:
     def zigzagLevelOrder(self, root_: TreeNode | None) -> list[list[int]]:
-        def zigzag_level_order(root: TreeNode | None):
+        def zigzag_level_order(root: TreeNode | None) -> Iterator[TreeNode]:
             level = (root,) if root else ()
             reverse = False
             while level:
