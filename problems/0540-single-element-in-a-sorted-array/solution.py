@@ -1,3 +1,3 @@
 class Solution:
-    def singleNonDuplicate(self, nums: List[int]) -> int:
-        return functools.reduce(lambda x, y: x ^ y, nums, 0)
+    def singleNonDuplicate(self, nums: list[int]) -> int:
+        return reduce(xor, nums)
