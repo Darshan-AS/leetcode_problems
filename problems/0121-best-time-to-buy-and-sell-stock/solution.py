@@ -1,3 +1,3 @@
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        return max(map(operator.sub, prices, accumulate(prices, min)))
+    def maxProfit(self, prices: list[int]) -> int:
+        return max(map(sub, prices, accumulate(prices, min)))
