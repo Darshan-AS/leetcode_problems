@@ -6,17 +6,22 @@
 #         self.right = right
 class Solution:
     def findDuplicateSubtrees(self, root_: TreeNode | None) -> list[TreeNode | None]:
-        counter = Counter()
+        ids_pool = count(1)
+        ids_count = Counter()
+        ids_seen = {}
         dups = []
 
-        def serialize(root: TreeNode | None) -> str:
-            if not root: return '#'
-            s = ','.join((str(root.val), serialize(root.left), serialize(root.right)))
-            counter[s] += 1
-            if counter[s] == 2: dups.append(root)
-            return s
+        Id = int | None
+        def helper(root: TreeNode | None) -> Id:
+            if not root: return
+            triple = (str(root.val), helper(root.left), helper(root.right))
+            id_ = ids_seen.get(triple, next(ids_pool))
+            ids_seen[triple] = id_
+            ids_count[id_] += 1
+            if ids_count[id_] == 2: dups.append(root)
+            return id_
         
-        serialize(root_)
+        helper(root_)
         return dups
 
         
