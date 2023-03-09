@@ -5,18 +5,13 @@
 #         self.next = None
 
 class Solution:
-    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        walker = runner = head
+    def detectCycle(self, head: ListNode | None) -> ListNode | None:
+        def iter_LL(ll: ListNode | None) -> Iterable[ListNode]:
+            node = ListNode(next=ll)
+            while (node := node.next): yield node
         
-        while runner and runner.next:
-            walker = walker.next
-            runner = runner.next.next
-            if walker == runner: break
-        else: return
+        walker_nodes = iter_LL(head)
+        runner_nodes = compress(iter_LL(head), cycle((0, 1)))
         
-        walker_a, walker_b = head, walker
-        while walker_a != walker_b:
-            walker_a = walker_a.next
-            walker_b = walker_b.next
-        
-        return walker_a
+        meet = next((w.next for w, r in zip(walker_nodes, runner_nodes) if w == r), None)
+        return next((a for a, b in zip(iter_LL(head), iter_LL(meet)) if a == b), None)
