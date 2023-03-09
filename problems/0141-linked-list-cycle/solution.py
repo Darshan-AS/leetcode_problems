@@ -5,13 +5,12 @@
 #         self.next = None
 
 class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
-        walker = runner = head
+    def hasCycle(self, head: ListNode | None) -> bool:
+        def iter_LL(ll: ListNode | None) -> Iterable[ListNode]:
+            node = ListNode(next=ll)
+            while (node := node.next): yield node
         
-        while runner and runner.next:
-            walker = walker.next
-            runner = runner.next.next
-            if walker == runner:
-                return True
-        
-        return False
+        walker_nodes = iter_LL(head)
+        runner_nodes = compress(iter_LL(head), cycle((0, 1)))
+        return any(map(eq, walker_nodes, runner_nodes))
+
