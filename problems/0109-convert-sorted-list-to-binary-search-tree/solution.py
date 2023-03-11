@@ -10,22 +10,24 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def sortedListToBST(self, head_: ListNode | None) -> TreeNode | None:
-        def iter_LL(head: ListNode | None) -> Iterator:
-            while head: yield head.val; head = head.next
+    def sortedListToBST(self, head: ListNode | None) -> TreeNode | None:
+        def iter_LL(ll: ListNode | None) -> Iterator[ListNode]:
+            while ll: yield ll; ll = ll.next
         
-        def len_LL(head: ListNode | None) -> int:
-            return sum(1 for _ in iter_LL(head))
+        def len_LL(ll: ListNode | None) -> int:
+            return sum(1 for _ in iter_LL(ll))
         
-        def sorted_iterator_to_BST(values: Iterator, low: int, high: int) -> TreeNode | None:
-            if low >= high: return None
-            mid = (low + high) // 2
-            
-            left_bst  = sorted_iterator_to_BST(values, low, mid)
-            root_val  = next(values)
-            right_bst = sorted_iterator_to_BST(values, mid + 1, high)
-            
-            return TreeNode(root_val, left_bst, right_bst)
+        def sorted_iter_to_BST(xs: Iterator, n: int) -> TreeNode | None:
+            if n == 0: return None
+
+            nl = (n - 1) // 2
+            nr = (n - 1) - nl
+
+            l_bst = sorted_iter_to_BST(xs, nl)
+            val = next(xs)
+            r_bst = sorted_iter_to_BST(xs, nr)
+
+            return TreeNode(val, l_bst, r_bst)
         
-        return sorted_iterator_to_BST(iter_LL(head_), 0, len_LL(head_))
-        
+        return sorted_iter_to_BST((x.val for x in iter_LL(head)), len_LL(head))
+
