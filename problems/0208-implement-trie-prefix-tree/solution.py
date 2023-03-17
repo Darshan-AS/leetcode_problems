@@ -1,32 +1,39 @@
 class Trie:
-    
+
     class Node:
         def __init__(self, children: dict = None, is_end: bool = False) -> None:
-            self.children = children if children else defaultdict(Trie.Node)
+            self.children = defaultdict(Trie.Node) if children is None else children
             self.is_end = is_end
 
-    def __init__(self) -> None:
+    f = lambda a, x: a.children[x]
+    g = lambda a, x: x not in a.children
+
+    def __init__(self):
         self.root = Trie.Node()
 
     def insert(self, word: str) -> None:
-        node = self.root
-        for ch in word: node = node.children[ch]
-        node.is_end = True
+        reduceM(Trie.f, word, self.root).is_end = True
 
     def search(self, word: str) -> bool:
-        node = self.root
-        for ch in word:
-            if ch not in node.children: return False
-            node = node.children[ch]
-        return node.is_end
+        return (n := reduceM(Trie.f, word, self.root, Trie.g)) is not None and n.is_end
 
     def startsWith(self, prefix: str) -> bool:
-        node = self.root
-        for ch in prefix:
-            if ch not in node.children: return False
-            node = node.children[ch]
-        return True
-    
+        return reduceM(Trie.f, prefix, self.root, Trie.g)
+
+
+T = TypeVar('T')
+A = TypeVar('A')
+Mapper = Callable[[A, T], A]
+Predicate  = Callable[[A, T], bool]
+
+def reduceM(f: Mapper, xs: Iterable[T], init: A | None = None, g: Predicate = lambda *_: False) -> A | None:
+    """Similar to functools.reduce, but terminates early if the predicate g(_, _) is True"""
+    xs = iter(xs)
+    a = next(xs) if init is None else init
+    for x in xs:
+        if g(a, x): return
+        a = f(a, x)
+    return a
 
 # Your Trie object will be instantiated and called as such:
 # obj = Trie()
