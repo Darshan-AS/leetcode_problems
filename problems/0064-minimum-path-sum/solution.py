@@ -1,8 +1,8 @@
 class Solution:
-    def minPathSum(self, grid: List[List[int]]) -> int:
+    def minPathSum(self, grid: list[list[int]]) -> int:
         m, n = len(grid), len(grid[0])
         
-        dp = [math.inf] * (n + 1)
+        dp = [inf] * (n + 1)
         dp[1] = 0
         for i, j in product(range(m), range(n)):
             k = j + 1
