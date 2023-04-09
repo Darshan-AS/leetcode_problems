@@ -6,13 +6,13 @@ class Solution:
 
         def max_color_count(graph: Graph) -> int:
             seen: set[Node] = set()
-            cyclic_counter = Counter({object: inf})
-            union_or_break = lambda c, node: c if c is cyclic_counter else c | count_colors(node)
+            sentinal = object()
+            union_or_break = lambda c, node: c if sentinal in c else c | count_colors(node)
 
             @cache
             def count_colors(root: Node) -> Counter[Color]:
                 color, nodes = graph[root]
-                if root in seen: return cyclic_counter
+                if root in seen: return Counter({sentinal: inf})
 
                 seen.add(root)
                 counter = Counter({color: 1}) + reduce(union_or_break, nodes, Counter())
