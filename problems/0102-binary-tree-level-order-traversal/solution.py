@@ -5,11 +5,12 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def levelOrder(self, root_: Optional[TreeNode]) -> List[List[int]]:
-        def level_order(root: Optional[TreeNode]):            
-            level = (root,) if root else ()
+    def levelOrder(self, root_: TreeNode | None) -> list[list[int]]:
+
+        def level_order(root: TreeNode | None) -> Iterable[Sequence[TreeNode]]:            
+            level = () if root is None else (root,)
             while level:
-                yield (node.val for node in level)
+                yield level
                 level = tuple(child for node in level for child in (node.left, node.right) if child)
             
-        return list(map(list, level_order(root_)))
+        return [[node.val for node in level] for level in level_order(root_)]
