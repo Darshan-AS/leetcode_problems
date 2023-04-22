@@ -1,11 +1,10 @@
 class Solution:
     def minInsertions(self, s: str) -> int:
-        @cache
-        def min_inserts(i: int, j: int) -> int:
-            return (
-                min_inserts(i + 1, j - 1)
-                if s[i] == s[j]
-                else 1 + min(min_inserts(i, j - 1), min_inserts(i + 1, j))
-            ) if i < j else 0
-        
-        return min_inserts(0, len(s) - 1)
+        n = len(s)
+        dp = [0] * (n + 1)
+        for i in range(n - 1, -1, -1):
+            prev = dp[i]
+            for j in range(i + 1, n):
+                k = j + 1
+                prev, dp[k] = (dp[k], prev if s[i] == s[j] else 1 + min(dp[k - 1], dp[k]))
+        return dp[-1]
