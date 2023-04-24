@@ -1,11 +1,9 @@
 class Solution:
-    def lastStoneWeight(self, stones_: list[int]) -> int:
-        stones = list(map(operator.neg, stones_))
-        heapq.heapify(stones)
+    def lastStoneWeight(self, stones: list[int]) -> int:
+        hq = list(map(neg, stones))
+        heapify(hq)
+
+        while len(hq) > 1 and hq[0] != 0:
+            heappush(hq, heappop(hq) - heappop(hq))
         
-        while len(stones) > 1 and stones[0] != 0:
-            a = heapq.heappop(stones)
-            b = heapq.heappop(stones)
-            heapq.heappush(stones, a - b)
-        
-        return -stones[0]
+        return -heappop(hq)
