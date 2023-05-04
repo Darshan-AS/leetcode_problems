@@ -1,15 +1,16 @@
 class Solution:
     def predictPartyVictory(self, senate: str) -> str:
-        n = len(senate)
+        rc = senate.count('R')
+        dc = len(senate) - rc
+        c = 0
+
+        q = deque(senate)
+        while rc and dc:
+            s = q.popleft()
+            if s == 'R' and c >= 0: q.append(s)
+            if s == 'R' and c <  0: rc -= 1
+            if s == 'D' and c <= 0: q.append(s)
+            if s == 'D' and c >  0: dc -= 1
+            c += 1 if s == 'R' else -1
         
-        rq, dq = reduce(
-            lambda a, x: a[x[1] == 'D'].append(x[0]) or a,
-            enumerate(senate),
-            (deque(), deque()),
-        )
-        
-        while rq and dq:
-            r, d = rq.popleft(), dq.popleft()
-            rq.append(r + n) if r < d else dq.append(d + n)
-        
-        return 'Radiant' if rq else 'Dire'
+        return 'Radiant' if rc else 'Dire'
