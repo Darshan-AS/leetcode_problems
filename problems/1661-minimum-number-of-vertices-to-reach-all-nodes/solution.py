@@ -1,6 +1,3 @@
 class Solution:
-    def findSmallestSetOfVertices(self, n: int, edges: list[list[int]]) -> Iterable[int]:
-        all_vertices = set(range(n))
-        reachable_vertices = {v for _, v in edges}
-        
-        return all_vertices - reachable_vertices
+    def findSmallestSetOfVertices(self, n: int, edges: list[list[int]]) -> list[int]:
+        return set(range(n)) - set(v for _, v in edges)
