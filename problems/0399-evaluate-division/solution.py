@@ -1,41 +1,20 @@
-from collections import deque
-
-class Node:
-    
-    def __init__(self, var, connections=None):
-        self.var = var
-        self.connections = connections if connections else {}
-
 class Solution:
-    def make_graph(self, equations, values):
-        graph = {}
-        for eqn, val in zip(equations, values):
-            numerator, denominator = eqn
-            graph[numerator] = numerator_node = graph[numerator] if numerator in graph else Node(numerator)
-            graph[denominator] = denominator_node = graph[denominator] if denominator in graph else Node(denominator)
-            numerator_node.connections[denominator_node] = val
-            denominator_node.connections[numerator_node] = 1 / val
-        return graph
-    
-    def solve(self, graph, query):
-        numerator, denominator = query
-        if numerator not in graph or denominator not in graph:
-            return -1.0
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        T = Hashable
+        W = int | float
+        WeightedGraph = Mapping[T, Mapping[T, W]]
+        def solve_div(graph: WeightedGraph, src: T, dest: T, seen: set[T]) -> W:
+            seen.add(src)
+            q = next((
+                graph[src][v] * x
+                for v in graph[src]
+                if v not in seen and
+                (x := solve_div(graph, v, dest, seen)) != -1
+            ), -1) if src != dest else 1
+            seen.remove(src)
+            return q
         
-        visited = set()
-        queue = deque([(graph[numerator], 1)])
-        while queue:
-            node, ans = queue.popleft()
-            visited.add(node.var)
-            
-            for connection, value in node.connections.items():
-                if connection.var == denominator:
-                    return ans * value
-                if connection.var not in visited:
-                    queue.append((connection, ans * value))
-        return -1.0
-        
-    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-        graph = self.make_graph(equations, values)
-        return list(map(lambda q: self.solve(graph, q), queries))
-        
+        g = defaultdict(lambda: defaultdict(int))
+        for (n, d), v in zip(equations, values): g[n][d] = v; g[d][n] = 1 / v
+
+        return [solve_div(g, s, d, set()) if s in g and d in g else -1 for s, d in queries]
