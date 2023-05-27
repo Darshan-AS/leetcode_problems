@@ -1,14 +1,10 @@
 class Solution:
     def stoneGameII(self, piles: list[int]) -> int:
         n = len(piles)
+        suffix_sums = tuple(reversed(tuple(accumulate(reversed(piles)))))
+
         @cache
-        def f(p, i, m):
-            if i == n: return 0
-            res = inf if p == 1 else -1
-            s = 0
-            for x in range(1, min(2 * m, n - i) + 1):
-                s += piles[i + x - 1]
-                res = min(res, f(0, i + x, max(m, x))) if p else max(res, s + f(1, i + x, max(m, x)))
-            return res
+        def score(i: int, m: int) -> int:
+            return max(suffix_sums[i] - score(i + x, max(m, x)) for x in range(1, 2 * m + 1)) if i < n else 0
         
-        return f(0, 0, 1)
+        return score(0, 1)
