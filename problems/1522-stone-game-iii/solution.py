@@ -1,13 +1,8 @@
 class Solution:
-    def stoneGameIII(self, stone_value: list[int]) -> str:
-        n = len(stone_value)
-        suffix_sums = tuple(reversed(tuple(accumulate(reversed(stone_value)))))
-
+    def stoneGameIII(self, values: list[int]) -> str:
         @cache
         def score(i: int) -> int:
-            return max(suffix_sums[i] - score(i + x) for x in range(1, 4)) if i < n else 0
+            return (i < len(values)) and max(sum(values[i : j]) - score(j) for j in range(i + 1, i + 4))
         
-        s = suffix_sums[0]
-        a = score(0)
-        b = s - a
-        return 'Tie' if a == b else ('Alice' if a > b else 'Bob')
+        s = score(0)
+        return 'Tie' if s == 0 else ('Alice' if s > 0 else 'Bob')
