@@ -10,7 +10,7 @@ class MyHashSet:
         self.state &= ~(1 << key)
 
     def contains(self, key: int) -> bool:
-        return self.state & 1 << key
+        return self.state & (1 << key)
 
 # Your MyHashSet object will be instantiated and called as such:
 # obj = MyHashSet()
