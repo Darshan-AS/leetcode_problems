@@ -1,21 +1,14 @@
 class Solution:
-    def maximumDetonation(self, bombs: List[List[int]]) -> int:        
-        n = len(bombs)
-        
-        g = {
-            i: [
-                j
-                for j, (x2, y2, _) in enumerate(bombs)
-                if i != j and (y2 - y1) ** 2 + (x2 - x1) ** 2 <= r1 ** 2
-            ]
-            for i, (x1, y1, r1) in enumerate(bombs)
-        }
-        
-        def connections(root, seen=None):
-            seen = set() if seen is None else seen
-            seen.add(root)
-            return 1 + sum(connections(node, seen) for node in g[root] if node not in seen)
-        
-        return max(map(connections, range(n)))
-        
-        
+    def maximumDetonation(self, bombs: list[list[int]]) -> int:
+        Bomb = tuple[int, int, int]
+        T = Hashable
+        Graph = Mapping[T, Collection[T]]
+
+        def in_range(b1: Bomb, b2: Bomb) -> bool:
+            return (b1[0] - b2[0]) ** 2 + (b1[1] - b2[1]) ** 2 <= b1[2] ** 2
+
+        def connections(graph: Graph, src: T, seen: set[T]) -> int:
+            return seen.add(src) or 1 + sum(connections(graph, x, seen) for x in graph[src] if x not in seen)
+
+        g = {i: tuple(j for j, b2 in enumerate(bombs) if in_range(b1, b2)) for i, b1 in enumerate(bombs)}
+        return max(connections(g, x, set()) for x in g)
