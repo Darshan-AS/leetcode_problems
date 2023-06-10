@@ -1,8 +1,8 @@
 class Solution:
-    def canJump(self, nums: List[int]) -> bool:
-        i, j, n = 0, 0, len(nums)
-        
-        while i <= j < n - 1:
-            i, j = i + 1, max(j, i + nums[i])
-        
-        return j >= n - 1
+    def canJump(self, nums: list[int]) -> bool:
+        r = 1
+        for n in nums:
+            if r <= 0: return False
+            r = max(r - 1, n)
+        return True
+
