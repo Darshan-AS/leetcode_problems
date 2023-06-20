@@ -1,22 +1,10 @@
 class Solution:
-    def getAverages(self, nums_: List[int], k: int) -> List[int]:
-        def window_sums(nums: list[int], w: int):
-            n = len(nums)
-            if w > n: return
-            
-            curr_sum = 0
-            for i in range(n):
-                curr_sum += nums[i]
-                if i == w - 1:
-                    yield curr_sum
-                elif i > w - 1:
-                    curr_sum -= nums[i - w]
-                    yield curr_sum
-        
-        n = len(nums_)
-        k_ = 2 * k + 1
-        if k_ > n: return [-1] * n
-        return [-1] * k + list(map(lambda x: x // k_, window_sums(nums_, k_))) + [-1] * k
-        
-        
-        
+    def getAverages(self, nums: list[int], k: int) -> list[int]:
+        w = 2 * k + 1
+        if len(nums) < w: return [-1] * len(nums)
+
+        lefts, rights = iter(nums), iter(nums)
+        first_sum = sum(islice(rights, w))
+
+        sums = accumulate(zip(lefts, rights), lambda a, x: a + x[1] - x[0], initial=first_sum)
+        return list(chain(repeat(-1, k), (s // w for s in sums), repeat(-1, k)))
