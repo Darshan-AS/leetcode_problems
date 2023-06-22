@@ -1,17 +1,9 @@
 class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        # Copied to avoid study plan reset
-        n = len(prices)
-        if n < 2:
-             return 0
+    def maxProfit(self, prices: list[int], fee: int) -> int:
+        @cache
+        def max_profit(i: int) -> int:
+            if i < 0: return (-inf, 0)
+            hold, free = max_profit(i - 1)
+            return max(hold, free - prices[i]), max(free, hold + prices[i] - fee)
         
-        profit = 0
-        minimum = prices[0]
-        for i in range(1, n):
-            if prices[i] < minimum:
-                minimum = prices[i]
-            elif prices[i] > minimum + fee:
-                profit += prices[i] - fee - minimum
-                minimum = prices[i] - fee
-        
-        return profit
+        return max_profit(len(prices) - 1)[1]
