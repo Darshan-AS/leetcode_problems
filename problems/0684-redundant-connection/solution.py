@@ -4,13 +4,16 @@ class Solution:
         for u, v in edges:
             if dsu.is_connected(u, v): return [u, v]
             dsu.union(u, v)
-    
+
+
 class DSU:
     T = Hashable
 
     def __init__(self, xs: Iterable[T] = tuple()) -> None:
-        self.parents = {x: x for x in xs}
-        self.sizes = {x: 1 for x in xs}
+        self.parents, self.sizes = reduce(
+            lambda a, x: setitem(a[0], x, x) or setitem(a[1], x, 1) or a,
+            xs, ({}, {}),
+        )
     
     def add(self, x: T) -> None:
         if x in self.parents: return
