@@ -1,15 +1,8 @@
 class Solution:
     def maximumRequests(self, n: int, requests: list[list[int]]) -> int:
-        def max_requests(i: int, emp_deltas: list[int]) -> int:
-            if i >= len(requests): return -inf if any(emp_deltas) else 0
-            u, v = requests[i]
-
-            skip = max_requests(i + 1, emp_deltas)
-
-            emp_deltas[u] -= 1; emp_deltas[v] += 1
-            take = max_requests(i + 1, emp_deltas)
-            emp_deltas[u] += 1; emp_deltas[v] -= 1
-
-            return max(skip, take + 1)
-        
-        return max_requests(0, [0] * n)
+        k = len(requests)
+        masks = (map(int, bin(i)[2:].zfill(k)) for i in range(1, 2 ** k))
+        powerset_reqs = (compress(requests, m) for m in masks)
+        def handle_req(counts, u, v): counts[u] -= 1; counts[v] += 1; return 1
+        count_diffs = ((sum(handle_req(counts, u, v) for u, v in p), any(counts.values())) for p in powerset_reqs for counts in (defaultdict(int),))
+        return max(filterfalse(itemgetter(1), count_diffs), default=(0, False))[0]
