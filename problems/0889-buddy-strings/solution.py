@@ -1,11 +1,6 @@
 class Solution:
-    def buddyStrings(self, a: str, b: str) -> bool:
-        if len(a) != len(b): return False
-        
-        mismatch = list(filter(lambda x: x[0] != x[1], zip(a, b)))
-        if len(mismatch) == 0:
-            return len(set(a)) != len(a)
-        elif len(mismatch) == 2:
-            return mismatch[0] == tuple(reversed(mismatch[1]))
-        else:
-            return False
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        match tuple(filter(lambda pair: ne(*pair), zip_longest(s, goal))):
+            case (): return len(set(s)) != len(s)
+            case ((a1, b1), (a2, b2)): return (a1, b1) == (b2, a2)
+            case other: return False
