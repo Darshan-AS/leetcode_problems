@@ -1,12 +1,5 @@
 class Solution:
     def longestSubarray(self, nums: list[int]) -> int:
-        T = TypeVar('T')
-
-        def split_count(xs: Iterable[T], d: T) -> Iterator[int]:
-            c = 0
-            for x in xs:
-                if x == d: yield c
-                c = 0 if x == d else c + 1
-            yield c
-        
-        return max(starmap(add, pairwise(split_count(nums, 0))), default=len(nums) - 1)
+        streaks_of_1s = accumulate(nums, lambda a, x: (a + 1) * (x != 0), initial=0)
+        streaks_at_0 = compress(streaks_of_1s, map(not_, chain(nums, (0,))))
+        return max(starmap(add, pairwise(streaks_at_0)), default=len(nums) - 1)
