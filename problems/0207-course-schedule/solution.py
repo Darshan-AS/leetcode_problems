@@ -1,24 +1,22 @@
-from collections import defaultdict, deque
-
 class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        graph = defaultdict(set)
-        indegrees = defaultdict(int)
-        
-        for course, pre_course in prerequisites:
-            graph[pre_course].add(course)
-            indegrees[course] += 1
-        
-        course_selected_count = 0
-        queue = deque((course for course in range(numCourses) if not indegrees[course]))
-        while queue:
-            pre_course = queue.popleft()
-            course_selected_count += 1
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        T = TypeVar('T')
+        Graph = Mapping[T, Container[T]]
+
+        def is_dag(g: Graph, root: T) -> bool:
+            seen: Container[T] = set()
+
+            @cache
+            def helper(node: T) -> bool:
+                if node in seen: return False
+                seen.add(node)
+                all_dag = all(map(helper, g[node]))
+                seen.remove(node)
+                return all_dag
             
-            for course in graph[pre_course]:
-                indegrees[course] -= 1
-                
-                if not indegrees[course]:
-                    queue.append(course)
+            return helper(root)
         
-        return course_selected_count == numCourses
+        graph = defaultdict(set, {-1: set(range(numCourses))})
+        for a, b in prerequisites: graph[a].add(b)
+
+        return is_dag(graph, -1)
