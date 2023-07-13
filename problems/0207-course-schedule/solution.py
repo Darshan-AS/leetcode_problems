@@ -8,11 +8,7 @@ class Solution:
 
             @cache
             def helper(node: T) -> bool:
-                if node in seen: return False
-                seen.add(node)
-                all_dag = all(map(helper, g[node]))
-                seen.remove(node)
-                return all_dag
+                return node not in seen and (seen.add(node), all(map(helper, g[node])), seen.remove(node))[1]
             
             return helper(root)
         
