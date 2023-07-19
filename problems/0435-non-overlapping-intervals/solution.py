@@ -1,10 +1,8 @@
 class Solution:
-    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:        
+    def eraseOverlapIntervals(self, intervals: list[list[int]]) -> int:
+        return reduce(
+            lambda a, x:  (x[1], a[1]) if a[0] <= x[0] else (a[0], a[1] + 1),
+            sorted(intervals, key=itemgetter(1)),
+            (-inf, 0), # (previous_end, removed_count)
+        )[1]
 
-        def pick_or_delete(a, x):
-            prev_end, deleted = a
-            start, end = x
-            return (prev_end, deleted + 1) if start < prev_end else (end, deleted)
-    
-        s_intervals = sorted(intervals, key=lambda x: x[1])
-        return reduce(pick_or_delete, s_intervals, (-math.inf, 0))[1]
