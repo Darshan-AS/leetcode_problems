@@ -1,3 +1,3 @@
 class Solution:
     def findLengthOfLCIS(self, nums: list[int]) -> int:
-        return max(accumulate(starmap(lt, pairwise(nums)), lambda a, x: a * x + x, initial=0)) + 1
+        return max(accumulate(starmap(lt, pairwise(nums)), lambda a, x: a * x + 1, initial=1))
