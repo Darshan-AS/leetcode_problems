@@ -4,8 +4,7 @@ class Solution:
         moves = ((1, 2), (2, 1), (2, -1), (1, -2), (-1, -2), (-2, -1), (-2, 1), (-1, 2))
         next_positions = prev_positions = lambda i, j: ((i + di, j + dj) for di, dj in moves)
 
-        @cache
-        def on_board_prob(k: int, i: int, j: int) -> float:
-            return sum(on_board_prob(k - 1, ni, nj) for ni, nj in next_positions(i, j) if on_board(ni, nj)) / 8 if k else on_board(i, j)
+        next_probs = lambda prob, k: [[sum(prob[ni][nj] for ni, nj in next_positions(i, j) if on_board(ni, nj)) / 8 for j in range(n)] for i in range(n)]
+        probs = reduce(next_probs, range(1, k + 1), [[1] * n for _ in range(n)])
         
-        return on_board_prob(k, row, column)
+        return probs[row][column]
