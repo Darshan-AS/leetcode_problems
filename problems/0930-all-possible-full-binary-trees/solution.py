@@ -5,11 +5,14 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    @cache
     def allPossibleFBT(self, n: int) -> list[TreeNode | None]:
-        return [
-            TreeNode(0, lt, rt)
-            for i in range(1, n - 1, 2)
-            for lt in self.allPossibleFBT(i)
-            for rt in self.allPossibleFBT(n - i - 1)
-        ] if n > 1 else [TreeNode()]
+        return reduce(
+            lambda a, n: setitem(a, n, [
+                TreeNode(0, lt, rt)
+                for i in range(1, n - 1, 2)
+                for lt in a[i]
+                for rt in a[n - i - 1]
+            ]) or a,
+            range(2, n + 1), {1: [TreeNode()]},
+        )[n]
+        
