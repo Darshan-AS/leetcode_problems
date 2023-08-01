@@ -1,14 +1,14 @@
 class Solution:
-    def combine(self, n: int, k: int) -> List[List[int]]:
-        def combinations(pool: list, r: int, index: int=0):
-            if r == 0:
-                yield ()
-                return
-            
-            if not (0 < r <= len(pool) and 0 <= index < len(pool)):
-                return
+    def combine(self, n: int, k: int) -> list[list[int]]:
+        T = TypeVar('T')
+        def combinations(pool: Iterable[T], r: int = None) -> Iterator[Iterator[T]]:
+            pool = tuple(pool)
+            r = len(pool) if r is None else r
 
-            yield from (chain((pool[index],), c) for c in combinations(pool, r - 1, index + 1))
-            yield from combinations(pool, r, index + 1)
+            yield from ((
+                (x,) + p
+                for i, x in enumerate(pool)
+                for p in combinations(pool[i + 1:], r - 1)
+            ) if pool else ()) if r else ((),)
         
-        return list(map(list, combinations(list(range(1, n + 1)), k)))
+        return list(combinations(range(1, n + 1), k))
