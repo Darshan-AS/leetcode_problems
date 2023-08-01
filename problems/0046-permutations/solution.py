@@ -1,12 +1,14 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        def permutations(a: list, r: int = None) -> iter:
-            r = len(a) if r is None else r
+        T = TypeVar('T')
+        def permutations(pool: Iterable[T], r: int = None) -> Iterator[Iterator[T]]:
+            pool = tuple(pool)
+            r = len(pool) if r is None else r
 
             yield from (
-                [x] + p
-                for i, x in enumerate(a)
-                for p in permutations(a[:i] + a[i + 1:], r - 1)
-            ) if a and r else ([],)
+                (x,) + p
+                for i, x in enumerate(pool)
+                for p in permutations(pool[:i] + pool[i + 1:], r - 1)
+            ) if pool and r else ((),)
         
         return list(permutations(nums))
