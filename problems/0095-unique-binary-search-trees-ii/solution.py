@@ -7,8 +7,9 @@
 
 class Solution:
     def generateTrees(self, n: int) -> list[TreeNode | None]:
+        @cache
         def gen_trees(start: int, end: int) -> Iterator[TreeNode | None]:
-            return (
+            return tuple(
                 TreeNode(value, deepcopy(left), deepcopy(right))
                 for value in range(start, end)
                 for left in gen_trees(start, value)
