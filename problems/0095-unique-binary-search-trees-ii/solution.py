@@ -15,4 +15,4 @@ class Solution:
                 for right in gen_trees(value + 1, end)
             ) if start < end else (None,)
         
-        return list(gen_trees(1, n + 1))
+        return gen_trees(1, n + 1)
