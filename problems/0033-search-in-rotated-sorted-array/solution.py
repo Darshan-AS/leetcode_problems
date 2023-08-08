@@ -5,10 +5,10 @@ class Solution:
         while l <= r:
             m = (l + r) // 2
 
-            if target < nums[m]:
-                l, r = (l, m - 1) if target >= nums[l] or nums[l] > nums[m] else (m + 1, r)
-            elif target > nums[m]:
-                l, r = (m + 1, r) if target <= nums[r] or nums[r] < nums[m] else (l, m - 1)
-            else: return m
+            if nums[m] == target: return m
+            elif nums[l] <= nums[m]:
+                l, r = (l, m - 1) if nums[l] <= target < nums[m] else (m + 1, r)
+            else:
+                l, r = (m + 1, r) if nums[m] < target <= nums[r] else (l, m - 1)
         
         return -1
