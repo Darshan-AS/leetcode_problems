@@ -1,27 +1,16 @@
 class Solution:
-    def search(self, nums: List[int], target: int) -> bool:
-        left, right = 0, len(nums) - 1
-        
-        while left <= right:
-            mid = (left + right) // 2
-            
-            if target == nums[mid]:
-                return True
-            
-            if nums[left] == nums[mid] == nums[right]:
-                left += 1
-                right -= 1
-                continue
-            
-            if nums[mid] <= nums[right]:
-                if nums[mid] < target <= nums[right]:
-                    left = mid + 1
-                else:
-                    right = mid - 1
-            elif nums[left] <= nums[mid]:
-                if nums[left] <= target < nums[mid]:
-                    right = mid - 1
-                else:
-                    left = mid + 1
+    def search(self, nums: list[int], target: int) -> bool:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            m = (l + r) // 2
+
+            if nums[m] == target: return True
+            elif nums[l] == nums[m] == nums[r]:
+                l, r = (l + 1, r - 1)
+            elif nums[l] <= nums[m]:
+                l, r = (l, m - 1) if nums[l] <= target < nums[m] else (m + 1, r)
+            else:
+                l, r = (m + 1, r) if nums[m] < target <= nums[r] else (l, m - 1)
         
         return False
