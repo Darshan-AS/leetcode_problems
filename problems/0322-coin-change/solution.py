@@ -1,11 +1,8 @@
 class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        n = len(coins)
+    def coinChange(self, coins: list[int], amount: int) -> int:
+        @cache
+        def count(a: int) -> int:
+            return min(count(a - c) for c in coins) + 1 if a > 0 else inf if a else 0
         
-        dp = [math.inf] * (amount + 1)
-        dp[0] = 0
-        
-        for i, j in product(range(n), range(amount + 1)):
-            dp[j] = min(dp[j], dp[j - coins[i]] + 1 if j >= coins[i] else math.inf)
-        
-        return -1 if dp[-1] == math.inf else dp[-1]
+        n = count(amount)
+        return -1 if n == inf else n
