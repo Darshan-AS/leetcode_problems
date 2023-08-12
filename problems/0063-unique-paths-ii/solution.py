@@ -1,11 +1,11 @@
 class Solution:
-    def uniquePathsWithObstacles(self, grid: List[List[int]]) -> int:
+    def uniquePathsWithObstacles(self, grid: list[list[int]]) -> int:
         m, n = len(grid), len(grid[0])
-        
-        dp = [0] * (n + 1)
-        dp[1] = 1
+
+        npaths = [0] * (n + 1)
+        npaths[1] = 1
+
         for i, j in product(range(m), range(n)):
-            k = j + 1
-            dp[k] = dp[k - 1] + dp[k] if grid[i][j] == 0 else 0
+            npaths[j + 1] = 0 if grid[i][j] else npaths[j + 1] + npaths[j]
         
-        return dp[-1]
+        return npaths[-1]
