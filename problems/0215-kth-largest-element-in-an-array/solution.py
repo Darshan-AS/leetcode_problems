@@ -1,35 +1,30 @@
 class Solution:
-    def findKthLargest(self, nums: list[int], k_: int) -> int:
-        
-        def quick_select(
-            seq: Sequence[Any],
-            k: int,
-            key: Callable[[Any], Any] = None,
-            reverse: bool = False,
-        ) -> Sequence[Any]:
-            
-            key = key if key else lambda x: x
+    def findKthLargest(self, nums: list[int], k: int) -> int:
+        T, V = TypeVar('T'), TypeVar('V')
+        Key = Callable[[T], V]
+
+        def quick_select(seq: Sequence[T], k: int, key: Key = None, reverse: bool = False) -> T:
+            key = (lambda x: x) if key is None else key
             seq = list(seq)
-            
-            def partition(low: int, high: int) -> int:
-                pivot_index, pivot = low, seq[low]
+
+            def partition(l: int, r: int) -> int:
+                pivot_idx, pivot = l, seq[l]
+
+                while l <= r:
+                    swap = key(seq[l]) < key(pivot) if reverse else key(seq[l]) > key(pivot)
+                    seq[l], seq[r] = (seq[r], seq[l]) if swap else (seq[l], seq[r])
+                    l, r = (l, r - 1) if swap else (l + 1, r)
                 
-                while low <= high:
-                    if (key(seq[low]) < key(pivot) if reverse else key(seq[low]) > key(pivot)):
-                        seq[low], seq[high] = seq[high], seq[low]
-                        high -= 1
-                    else:
-                        low += 1
-                
-                seq[pivot_index], seq[high] = seq[high], seq[pivot_index]
-                return high
+                seq[pivot_idx], seq[r] = seq[r], seq[pivot_idx]
+                return r
+
             
             i, j = 0, len(seq) - 1
-            x, k = -1, k - 1
+            k = k - 1
             while (x := partition(i, j)) != k:
-                if x < k: i = x + 1
-                elif x > k: j = x - 1
+                i, j = (x + 1, j) if x < k else (i, x - 1)
             
             return seq[k]
         
-        return quick_select(nums, k_, reverse=True)
+        
+        return quick_select(nums, k, reverse=True)
