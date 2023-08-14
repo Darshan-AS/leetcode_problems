@@ -4,27 +4,15 @@ class Solution:
         Key = Callable[[T], V]
 
         def quick_select(seq: Sequence[T], k: int, key: Key = None, reverse: bool = False) -> T:
+            pivot = choice(seq)
             key = (lambda x: x) if key is None else key
-            seq = list(seq)
+            cmp = lambda x: ((key(x) > key(pivot)) - (key(x) < key(pivot))) * (-1 if reverse else 1)
 
-            def partition(l: int, r: int) -> int:
-                pivot_idx, pivot = l, seq[l]
+            mids, rights, lefts = reduce(lambda a, x: a[cmp(x)].append(x) or a, seq, ([], [], []))
+            nl, nr = len(lefts), len(lefts) + len(mids)
 
-                while l <= r:
-                    swap = key(seq[l]) < key(pivot) if reverse else key(seq[l]) > key(pivot)
-                    seq[l], seq[r] = (seq[r], seq[l]) if swap else (seq[l], seq[r])
-                    l, r = (l, r - 1) if swap else (l + 1, r)
-                
-                seq[pivot_idx], seq[r] = seq[r], seq[pivot_idx]
-                return r
+            if k <= nl: return quick_select(lefts , k, key, reverse)
+            if k >  nr: return quick_select(rights, k - nr, key, reverse)
+            return pivot
 
-            
-            i, j = 0, len(seq) - 1
-            k = k - 1
-            while (x := partition(i, j)) != k:
-                i, j = (x + 1, j) if x < k else (i, x - 1)
-            
-            return seq[k]
-        
-        
         return quick_select(nums, k, reverse=True)
