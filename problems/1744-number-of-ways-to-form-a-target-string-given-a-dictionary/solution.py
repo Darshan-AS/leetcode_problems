@@ -5,7 +5,7 @@ class Solution:
         @cache
         def ways(i: int, j: int) -> int:
             if j < 0: return 1
-            if i < 0: return 0
+            if i < j: return 0
             col, ch = columns[i], target[j]
             return (ways(i - 1, j) + (ways(i - 1, j - 1) * col[ch] if ch in col else 0)) % 1_000_000_007
         
