@@ -1,13 +1,7 @@
-import string
-class Solution(object):
-    def convertToTitle(self, n):
-        """
-        :type n: int
-        :rtype: str
-        """
-        
+class Solution:
+    def convertToTitle(self, column_number: int) -> str:
         solution_values = []
-        i = n
+        i = column_number
         
         while i:
             i = i - 1
