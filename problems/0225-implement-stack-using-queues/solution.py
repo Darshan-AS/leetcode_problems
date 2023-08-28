@@ -4,21 +4,13 @@ class MyStack:
         self.queue = deque()
 
     def push(self, x: int) -> None:
-        q = deque()
-        q.append(x)
-        q.append(self.queue)
-        self.queue = q
+        self.queue = deque((x, self.queue))
 
     def pop(self) -> int:
-        assert not self.empty()
-        
-        value = self.queue.popleft()
-        self.queue = self.queue.popleft()
+        value, self.queue = self.queue
         return value
 
     def top(self) -> int:
-        assert not self.empty()
-        
         return self.queue[0]
 
     def empty(self) -> bool:
