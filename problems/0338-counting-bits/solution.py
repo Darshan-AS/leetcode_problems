@@ -1,8 +1,4 @@
 class Solution:
     def countBits(self, n: int) -> list[int]:
-        return list(map(Solution.count_bit, range(n + 1)))
-    
-    @cache
-    @staticmethod
-    def count_bit(n: int) -> int:
-        return Solution.count_bit(n // 2) + (n % 2) if n else 0
+        return reduce(lambda a, x: setitem(a, x, a[x // 2] + x % 2) or a, range(n + 1), [0] * (n + 1))
+
