@@ -1,16 +1,10 @@
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:        
-        def combination_sum(index: int, rem_target: int):
-            if rem_target == 0:
-                yield ()
-                return
-            
-            if not (0 <= rem_target and 0 <= index < len(candidates)):
-                return
-            
-            x = candidates[index]
-            yield from (chain((x,), c) for c in combination_sum(index, rem_target - x))
-            yield from combination_sum(index + 1, rem_target)
-            
-        return list(map(list, combination_sum(0, target)))
-
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        def comb_sum(i: int, k: int) -> Iterator[list]:
+            yield from chain(
+                comb_sum(i - 1, k),
+                (c.append(candidates[i]) or c for c in comb_sum(i, k - candidates[i])),
+            ) if i >= 0 and k > 0 else () if k else ([],)
+        
+        return list(comb_sum(len(candidates) - 1, target))
+        
