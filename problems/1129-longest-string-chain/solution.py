@@ -1,8 +1,8 @@
 class Solution:
     def longestStrChain(self, words: list[str]) -> int:
-        w_chain = {}
-        for w in sorted(words, key=len):
-            w_chain[w] = max(w_chain.get(w[:j] + w[j + 1:], 0) for j in range(len(w))) + 1
-        
-        return max(w_chain.values())
+        return max(reduce(
+            lambda a, w: setitem(a, w, max(a.get(w[:j] + w[j + 1:], 0) for j in range(len(w))) + 1) or a,
+            sorted(words, key=len),
+            {}, # w_chain (Longest chain for given word w)
+        ).values())
         
