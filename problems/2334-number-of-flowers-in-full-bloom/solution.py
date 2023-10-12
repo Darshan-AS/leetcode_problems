@@ -1,19 +1,4 @@
 class Solution:
-    def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
-        starts = []
-        ends = []
-        
-        for start, end in flowers:
-            starts.append(start)
-            ends.append(end + 1)
-            
-        starts.sort()
-        ends.sort()
-        ans = []
-
-        for person in people:
-            i = bisect_right(starts, person)
-            j = bisect_right(ends, person)
-            ans.append(i - j)
-        
-        return ans
+    def fullBloomFlowers(self, flowers: list[list[int]], people: list[int]) -> list[int]:
+        starts, ends = map(sorted, zip(*flowers))
+        return [bisect_right(starts, p) - bisect_right(ends, p - 1) for p in people]
