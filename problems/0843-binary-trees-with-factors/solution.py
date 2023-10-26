@@ -1,11 +1,14 @@
 class Solution:
-    def numFactoredBinaryTrees(self, arr):
-        arr.sort()
-        dct = {elem: 1 for elem in arr}
-        for elem in arr:
-            for factor in arr:
-                if factor == elem:
-                    break
-                if elem % factor == 0 and elem // factor in dct:
-                    dct[elem] += dct[factor] * dct[elem // factor]
-        return sum(dct.values()) % (pow(10, 9) + 7)
+    def numFactoredBinaryTrees(self, arr: list[int]) -> int:
+        xs = sorted(arr)
+        M = 1_000_000_007
+
+        counts = dict(zip(xs, repeat(1)))
+        for x in xs:
+            counts[x] += sum(
+                (counts[y] * counts[x // y]) % M
+                for y in takewhile(lambda y: y < x, xs)
+                if x % y == 0 and x // y in counts
+            ) % M
+        
+        return sum(counts.values()) % M
