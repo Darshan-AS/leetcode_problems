@@ -1,5 +1,4 @@
-from math import log, ceil
-
 class Solution:
-    def poorPigs(self, buckets: int, minutesToDie: int, minutesToTest: int) -> int:
-        return ceil(log(buckets, minutesToTest // minutesToDie + 1))
+    def poorPigs(self, buckets: int, minutes_to_die: int, minutes_to_test: int) -> int:
+        pigs = log(buckets, minutes_to_test // minutes_to_die + 1)
+        return round(pigs) if isclose(pigs, round(pigs)) else ceil(pigs)
