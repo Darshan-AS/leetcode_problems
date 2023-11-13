@@ -1,5 +1,6 @@
 class Solution:
     def sortVowels(self, s: str) -> str:
-        is_vowel = tuple(x in 'AEIOUaeiou' for x in s)
-        s_vowels = iter(sorted(compress(s, is_vowel)))
-        return ''.join(next(s_vowels) if v else x for x, v in zip(s, is_vowel))
+        vowels = 'AEIOUaeiou'
+        c = Counter(s)
+        s_vowels = chain.from_iterable(repeat(v, c[v]) for v in vowels)
+        return ''.join(next(s_vowels) if x in vowels else x for x in s)
