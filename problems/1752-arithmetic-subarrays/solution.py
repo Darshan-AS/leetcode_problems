@@ -1,5 +1,5 @@
 class Solution:
-    def checkArithmeticSubarrays(self, nums: List[int], l: List[int], r: List[int]) -> List[bool]:        
+    def checkArithmeticSubarrays(self, nums: list[int], l: list[int], r: list[int]) -> list[bool]:        
         def is_arithmetic(iterable: iter) -> bool:
             a, b = tee(iterable)
             next(a, None)
