@@ -1,33 +1,27 @@
 class Solution:
     def numDecodings(self, s: str) -> int:
         M = 1_000_000_007
-        
-        n = len(s)
+
         a, b = 0, 1
         
-        for x in range(n):
-            i = x + 2
-            b_ = b
+        for prev_ch, ch in pairwise(chain('0', s)):
+            p = q = 0
+
+            # Number of ways considering `prev_ch + ch` as a single number.
+            match prev_ch, ch:
+                case '1', '*': p = 9
+                case '2', '*': p = 6
+                case '*', '*': p = 15
+                case '1',  _ : p = 1
+                case '2',  x : p = 1 if x <= '6' else 0
+                case '*',  x : p = 2 if x <= '6' else 1
             
-            prev_ch, ch = s[x - 1] if x else '0', s[x]
+            # Number of ways considering only `ch` as a single number.
+            match ch:
+                case '*': q = 9
+                case '0': q = 0
+                case  _ : q = 1
             
-            if ch == '*':
-                b = (b * 9) % M
-                if prev_ch == '1':
-                    b = (b + a * 9) % M
-                elif prev_ch == '2':
-                    b = (b + a * 6) % M
-                elif prev_ch == '*':
-                    b = (b + a * 15) % M
-            else:
-                b = b if ch != '0' else 0
-                if prev_ch == '1':
-                    b = (b + a) % M
-                elif prev_ch == '2':
-                    b = (b + a * (1 if ch <= '6' else 0)) % M
-                elif prev_ch == '*':
-                    b = (b + a * (2 if ch <= '6' else 1)) % M
-            
-            a, b = b_, b
+            a, b = b, (a * p + b * q) % M
         
         return b
